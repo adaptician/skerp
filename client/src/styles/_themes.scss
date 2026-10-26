@@ -1,0 +1,68 @@
+@use 'colors' as *;
+
+// Layer 2 — semantic colour tokens (styling.md). Mirrors the Figma "Color" collection, mode "Light";
+// each property name is the variable's WEB code syntax. The Sales theme ships light only, so :root
+// carries the complete set and no [data-theme] override exists yet.
+
+:root {
+  color-scheme: light;
+
+  --color-background: #{$linen};
+  --color-surface: #{$ivory-cream};
+  --color-surface-raised: #{$porcelain};
+  --color-surface-sunken: #{$linen};
+  --color-surface-hover: #{$almond};
+  --color-surface-selected: #{$clay-blush};
+  --color-surface-disabled: #{$almond};
+  --color-surface-inverse: #{$espresso};
+  --color-skeleton: #{$almond};
+  --color-overlay: #{$espresso-scrim};
+  --color-transparent: transparent;
+
+  --color-text: #{$warm-charcoal};
+  --color-text-strong: #{$espresso};
+  --color-text-muted: #{$walnut-brown};
+  --color-text-placeholder: #{$taupe-grey};
+  --color-text-disabled: #{$taupe-grey};
+  --color-text-on-primary: #{$ivory-cream};
+  --color-text-on-danger: #{$ivory-cream};
+  --color-text-link: #{$rust-clay};
+  --color-text-inverse: #{$ivory-cream};
+
+  --color-border: #{$sand-dollar};
+  --color-border-strong: #{$taupe-grey};
+  --color-border-focus: #{$terracotta};
+  --color-border-error: #{$garnet};
+  --color-border-disabled: #{$khaki-stone};
+
+  --color-icon: #{$walnut-brown};
+  --color-icon-strong: #{$warm-charcoal};
+
+  --color-primary: #{$terracotta};
+  --color-primary-hover: #{$rust-clay};
+  --color-primary-muted: #{$clay-blush};
+  --color-danger: #{$garnet};
+  --color-danger-hover: #{$oxblood};
+  --color-danger-muted: #{$rosewater};
+  --color-success: #{$fern-green};
+  --color-success-muted: #{$sage-mist};
+  --color-warning: #{$umber-ochre};
+  --color-warning-muted: #{$wheat-cream};
+  --color-info: #{$dusty-teal};
+  --color-info-muted: #{$seafoam-mist};
+  --color-focus-ring: #{$clay-rose};
+
+  --color-status-pending-background: #{$wheat-cream};
+  --color-status-pending-text: #{$umber-ochre};
+  --color-status-confirmed-background: #{$seafoam-mist};
+  --color-status-confirmed-text: #{$deep-lagoon};
+  --color-status-fulfilled-background: #{$sage-mist};
+  --color-status-fulfilled-text: #{$fern-green};
+  --color-status-cancelled-background: #{$almond};
+  --color-status-cancelled-text: #{$walnut-brown};
+
+  --color-backdrop-base: #{$linen};
+  --color-backdrop-glow-clay: #{$clay-blush};
+  --color-backdrop-glow-sage: #{$sage-mist};
+  --color-backdrop-glow-wheat: #{$wheat-cream};
+}

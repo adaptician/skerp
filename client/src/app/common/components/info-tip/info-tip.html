@@ -1,0 +1,22 @@
+<button
+  #button
+  type="button"
+  class="info-tip__button"
+  [attr.aria-label]="label()"
+  [attr.aria-describedby]="tipId"
+  (click)="$event.stopPropagation(); show()"
+>
+  <a-icon name="info" size="sm" />
+</button>
+<span
+  class="info-tip__tooltip"
+  role="tooltip"
+  [id]="tipId"
+  [class.info-tip__tooltip--visible]="visible()"
+  [style.top.px]="position().top"
+  [style.left.px]="position().left"
+  [style.width.px]="position().width"
+>
+  <span class="info-tip__arrow" [style.left.px]="position().arrowLeft"></span>
+  {{ text() }}
+</span>

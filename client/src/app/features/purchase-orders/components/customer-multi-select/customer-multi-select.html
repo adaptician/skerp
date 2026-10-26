@@ -1,0 +1,111 @@
+<div class="field">
+  <span class="field__label" [id]="id + '-label'">Customers</span>
+  <div class="customer-select">
+    <div
+      class="field__control customer-select__control"
+      [class.customer-select__control--open]="open()"
+    >
+      <div class="customer-select__pills">
+        @if (selected().length > 0) {
+          <a-pill-removable
+            [label]="selected()[0].name"
+            [removeLabel]="'Remove ' + selected()[0].name + ' from the filter'"
+            (removed)="remove(selected()[0].id)"
+          />
+          @if (selected().length > 1) {
+            <a-pill>+{{ selected().length - 1 }} more</a-pill>
+          }
+        }
+      </div>
+      <button
+        type="button"
+        class="customer-select__trigger"
+        [attr.aria-labelledby]="id + '-label ' + id + '-summary'"
+        [attr.aria-expanded]="open()"
+        [attr.aria-controls]="id + '-panel'"
+        (click)="toggleOpen()"
+      >
+        @if (selected().length === 0) {
+          <span class="customer-select__placeholder">All customers</span>
+        }
+        <span class="visually-hidden" [id]="id + '-summary'">
+          {{ selected().length === 0 ? 'All customers' : selected().length + ' selected' }}
+        </span>
+        <a-icon class="field__icon" [name]="open() ? 'chevron-up' : 'chevron-down'" />
+      </button>
+    </div>
+
+    @if (open()) {
+      <div
+        class="customer-select__panel"
+        [class.customer-select__panel--inline]="inline()"
+        [id]="id + '-panel'"
+      >
+        <div class="customer-select__search">
+          <div class="field__control">
+            <a-icon class="field__icon" name="search" />
+            <input
+              class="field__input"
+              type="search"
+              placeholder="Search customers"
+              autocomplete="off"
+              aria-label="Search customers"
+              [value]="search()"
+              (input)="onSearch($any($event.target).value)"
+            />
+            @if (search().length > 0) {
+              <button type="button" class="icon-button icon-button--sm" (click)="clearSearch()">
+                <a-icon name="close" size="sm" />
+                <span class="visually-hidden">Clear the customer search</span>
+              </button>
+            }
+          </div>
+        </div>
+
+        <ul class="customer-select__options" [attr.aria-label]="'Customers to filter by'">
+          @for (customer of options(); track customer.id) {
+            <li>
+              <label
+                class="customer-select__option"
+                [class.customer-select__option--selected]="isSelected(customer.id)"
+                [class.customer-select__option--disabled]="!isSelected(customer.id) && atLimit()"
+              >
+                <input
+                  type="checkbox"
+                  class="customer-select__checkbox"
+                  [checked]="isSelected(customer.id)"
+                  [disabled]="!isSelected(customer.id) && atLimit()"
+                  (change)="toggle(customer)"
+                />
+                <span class="customer-select__box" aria-hidden="true">
+                  @if (isSelected(customer.id)) {
+                    <a-icon name="check" size="sm" />
+                  }
+                </span>
+                {{ customer.name }}
+              </label>
+            </li>
+          } @empty {
+            <li class="customer-select__empty">
+              @if (searching()) {
+                <a-icon name="loader" size="sm" />Searching…
+              } @else if (search().trim().length > 0) {
+                No customers found
+              } @else {
+                Type a name to find customers
+              }
+            </li>
+          }
+        </ul>
+
+        <p class="customer-select__hint" role="status">
+          <a-icon name="info" size="sm" />Up to {{ max }} customers ·
+          {{ selected().length }} selected
+        </p>
+      </div>
+    }
+  </div>
+  @if (inline()) {
+    <p class="field__helper">Up to {{ max }} customers</p>
+  }
+</div>

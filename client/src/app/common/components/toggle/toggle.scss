@@ -1,0 +1,95 @@
+@use 'typography' as *;
+@use 'mixins' as *;
+
+// Layer 3 — Control/Toggle tokens: track colour per state, off and on.
+:host {
+  --toggle__track: var(--color-icon);
+  --toggle__track--hover: var(--color-icon-strong);
+  --toggle__track--on: var(--color-primary);
+  --toggle__track--on-hover: var(--color-primary-hover);
+  --toggle__track--disabled: var(--color-surface-disabled);
+  --toggle__track-border--disabled: var(--color-border-disabled);
+  --toggle__knob: var(--color-surface-raised);
+  --toggle__label: var(--color-text);
+  --toggle__label--disabled: var(--color-text-disabled);
+
+  display: inline-flex;
+}
+
+.toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-3);
+  min-height: var(--size-control-lg);
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+
+  &:focus-visible {
+    outline: none;
+
+    .toggle__track {
+      @include focus-ring;
+    }
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+  }
+}
+
+.toggle__track {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  width: 40px;
+  height: 24px;
+  padding: var(--spacing-1);
+  border-radius: var(--border-radius-pill);
+  background: var(--toggle__track);
+  transition: background-color 120ms ease;
+}
+
+.toggle__knob {
+  width: 16px;
+  height: 16px;
+  border-radius: var(--border-radius-pill);
+  background: var(--toggle__knob);
+  transition: transform 120ms ease;
+}
+
+.toggle__label {
+  @include body-sm-strong;
+  color: var(--toggle__label);
+  white-space: nowrap;
+}
+
+.toggle:hover:not(:disabled) .toggle__track {
+  background: var(--toggle__track--hover);
+}
+
+.toggle--on {
+  .toggle__track {
+    background: var(--toggle__track--on);
+  }
+
+  .toggle__knob {
+    transform: translateX(16px);
+  }
+
+  &:hover:not(:disabled) .toggle__track {
+    background: var(--toggle__track--on-hover);
+  }
+}
+
+.toggle:disabled {
+  .toggle__track {
+    background: var(--toggle__track--disabled);
+    box-shadow: inset 0 0 0 var(--border-width-default) var(--toggle__track-border--disabled);
+  }
+
+  .toggle__label {
+    color: var(--toggle__label--disabled);
+  }
+}

@@ -1,0 +1,25 @@
+@switch (connection()) {
+  @case ('live') {
+    <span class="monitor-health monitor-health--live" role="status">
+      <span class="monitor-health__dot" aria-hidden="true"></span>Live
+    </span>
+  }
+  @case ('disconnected') {
+    <div class="monitor-health__alert" role="alert">
+      <span class="monitor-health monitor-health--disconnected">
+        <span class="monitor-health__dot" aria-hidden="true"></span>Disconnected
+      </span>
+      <span class="monitor-health__message"
+        >Live updates stopped. Refresh the page to reconnect.</span
+      >
+      <button type="button" class="button button--secondary button--sm" (click)="refresh.emit()">
+        <a-icon name="loader" size="sm" />Refresh
+      </button>
+    </div>
+  }
+  @default {
+    <span class="monitor-health monitor-health--connecting" role="status">
+      <span class="monitor-health__dot" aria-hidden="true"></span>Connecting…
+    </span>
+  }
+}

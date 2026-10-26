@@ -1,0 +1,103 @@
+<div class="po-page">
+  <header class="po-page__title-row">
+    <div class="po-page__title">
+      <h1 class="po-page__heading">Purchase orders</h1>
+      <p class="po-page__description">Create, find and track customer purchase orders.</p>
+    </div>
+    <div class="po-page__actions">
+      <a-toggle
+        label="Monitor Mode"
+        [checked]="monitorMode()"
+        (checkedChange)="toggleMonitorMode($event)"
+      />
+      @if (monitorMode()) {
+        <adapt-monitor-health [connection]="monitor().connection" (refresh)="reload()" />
+      } @else {
+        <button
+          type="button"
+          class="button button--primary button--md po-page__new"
+          (click)="openCreate()"
+        >
+          <a-icon name="plus" size="sm" />New purchase order
+        </button>
+      }
+    </div>
+  </header>
+
+  <adapt-purchase-order-filters
+    [query]="query()"
+    [wide]="wide()"
+    (changed)="changeFilters($event)"
+    (cleared)="clearFilters()"
+  />
+
+  <adapt-purchase-order-list
+    [items]="items()"
+    [expanded]="expanded()"
+    [lineItems]="lineItems()"
+    [loading]="loading()"
+    [failed]="failed()"
+    [sorting]="query().sorting"
+    [hasFilters]="hasFilters()"
+    [wide]="wide()"
+    [monitor]="monitorMode()"
+    [rowChanges]="rowChanges()"
+    [rowActions]="rowActions"
+    [statusTemplate]="statusControl"
+    (toggleRow)="toggleRow($event)"
+    (loadMoreLines)="loadMoreLines($event)"
+    (toggleSort)="toggleSort()"
+    (action)="onAction($event)"
+    (retry)="retry()"
+    (clearFilters)="clearFilters()"
+  />
+
+  @if (totalCount() > 0 && !failed()) {
+    <a-pagination
+      [page]="query().page"
+      [pageSize]="pageSize"
+      [totalCount]="totalCount()"
+      noun="purchase orders"
+      [compact]="!wide()"
+      (pageChange)="changePage($event)"
+    />
+  }
+</div>
+
+<ng-template #statusControl let-order let-size="size">
+  <adapt-status-control
+    [order]="order"
+    [size]="size"
+    [demoMode]="demoMode()"
+    [busy]="statusChanging().includes(order.id)"
+    (statusSelected)="changeStatus(order.id, $event)"
+  />
+</ng-template>
+
+@if (deleting(); as order) {
+  <a-confirm-modal
+    title="Delete purchase order?"
+    [message]="deleteMessage(order)"
+    confirmLabel="Delete"
+    [busy]="deleteBusy()"
+    (cancelled)="cancelDelete()"
+    (confirmed)="confirmDelete()"
+  />
+}
+
+@if (editingOrder(); as order) {
+  <adapt-purchase-order-form
+    [order]="order"
+    [demoMode]="demoMode()"
+    (closed)="closeEdit()"
+    (edited)="onEdited($event)"
+  />
+}
+
+@if (creating()) {
+  <adapt-purchase-order-form
+    [demoMode]="demoMode()"
+    (closed)="closeCreate()"
+    (saved)="onCreated($event)"
+  />
+}

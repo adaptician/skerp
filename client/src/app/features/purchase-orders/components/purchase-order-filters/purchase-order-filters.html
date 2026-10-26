@@ -1,0 +1,143 @@
+@if (wide()) {
+  <section class="filter-bar" aria-label="Filter purchase orders">
+    <div class="field filter-bar__reference">
+      <label class="field__label" for="po-filter-reference">Reference</label>
+      <ng-container [ngTemplateOutlet]="searchControl" />
+    </div>
+
+    <adapt-customer-multi-select
+      class="filter-bar__customers"
+      [selected]="query().customers"
+      (selectedChange)="setCustomers($event)"
+    />
+
+    <div class="field filter-bar__status">
+      <label class="field__label" for="po-filter-status">Status</label>
+      <div class="field__control">
+        <select
+          id="po-filter-status"
+          class="field__input filter-bar__select"
+          [value]="query().statusId ?? ''"
+          (change)="setStatus($any($event.target).value)"
+        >
+          <option value="">All statuses</option>
+          @for (status of statusOptions; track status.id) {
+            <option [value]="status.id" [selected]="status.id === query().statusId">
+              {{ status.label }}
+            </option>
+          }
+        </select>
+        <a-icon class="field__icon" name="chevron-down" />
+      </div>
+    </div>
+
+    <adapt-date-range-field
+      class="filter-bar__created"
+      [value]="{ from: query().createdFrom, to: query().createdTo }"
+      (valueChange)="setCreated($event)"
+    />
+
+    <button
+      type="button"
+      class="filter-bar__clear"
+      [disabled]="!anyFilter()"
+      (click)="cleared.emit()"
+    >
+      <a-icon name="close" />Clear filters
+    </button>
+  </section>
+} @else {
+  <div class="filter-toolbar">
+    <div class="field filter-toolbar__search">
+      <label class="visually-hidden" for="po-filter-reference">Search by reference</label>
+      <ng-container [ngTemplateOutlet]="searchControl" />
+    </div>
+    <button
+      type="button"
+      class="button button--secondary button--lg filter-toolbar__button"
+      aria-haspopup="dialog"
+      (click)="openSheet()"
+    >
+      <a-icon name="filter" />Filters{{ filterCount() > 0 ? ' · ' + filterCount() : '' }}
+    </button>
+  </div>
+
+  @if (sheetOpen() && draft(); as current) {
+    <a-modal
+      title="Filters"
+      closeLabel="Close filters"
+      variant="sheet"
+      class="filter-sheet"
+      (closed)="closeSheet()"
+    >
+      <adapt-customer-multi-select
+        [inline]="true"
+        [selected]="current.customers"
+        (selectedChange)="updateDraft({ customers: $event })"
+      />
+
+      <div class="field">
+        <label class="field__label" for="po-sheet-status">Status</label>
+        <div class="field__control">
+          <select
+            id="po-sheet-status"
+            class="field__input filter-bar__select"
+            (change)="
+              updateDraft({
+                statusId: $any($event.target).value === '' ? null : +$any($event.target).value,
+              })
+            "
+          >
+            <option value="" [selected]="current.statusId === null">All statuses</option>
+            @for (status of statusOptions; track status.id) {
+              <option [value]="status.id" [selected]="status.id === current.statusId">
+                {{ status.label }}
+              </option>
+            }
+          </select>
+          <a-icon class="field__icon" name="chevron-down" />
+        </div>
+      </div>
+
+      <adapt-date-range-field
+        [inline]="true"
+        [value]="{ from: current.createdFrom, to: current.createdTo }"
+        (valueChange)="updateDraft({ createdFrom: $event.from, createdTo: $event.to })"
+      />
+
+      <div modalFooter class="filter-sheet__footer">
+        <button type="button" class="filter-bar__clear filter-sheet__clear" (click)="clearDraft()">
+          Clear filters
+        </button>
+        <button
+          type="button"
+          class="button button--primary button--lg filter-sheet__show"
+          (click)="applyDraft()"
+        >
+          {{ showLabel() }}
+        </button>
+      </div>
+    </a-modal>
+  }
+}
+
+<ng-template #searchControl>
+  <div class="field__control">
+    <a-icon class="field__icon" name="search" />
+    <input
+      id="po-filter-reference"
+      class="field__input"
+      type="search"
+      placeholder="Search by reference"
+      autocomplete="off"
+      [value]="search()"
+      (input)="onSearch($any($event.target).value)"
+    />
+    @if (search().length > 0) {
+      <button type="button" class="icon-button icon-button--sm" (click)="clearSearch()">
+        <a-icon name="close" size="sm" />
+        <span class="visually-hidden">Clear the reference search</span>
+      </button>
+    }
+  </div>
+</ng-template>

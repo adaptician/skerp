@@ -1,0 +1,64 @@
+<nav class="pagination" [class.pagination--compact]="compact()" aria-label="Pagination">
+  @if (compact()) {
+    <button
+      type="button"
+      class="icon-button icon-button--lg"
+      [disabled]="page() <= 1"
+      (click)="go(page() - 1)"
+    >
+      <a-icon name="chevron-left" />
+      <span class="visually-hidden">Previous page</span>
+    </button>
+    <p class="pagination__compact-summary" aria-live="polite">
+      <span class="pagination__page">Page {{ page() }} of {{ pageCount() }}</span>
+      <span class="pagination__range">{{ first() }}–{{ last() }} of {{ totalCount() }}</span>
+    </p>
+    <button
+      type="button"
+      class="icon-button icon-button--lg"
+      [disabled]="page() >= pageCount()"
+      (click)="go(page() + 1)"
+    >
+      <a-icon name="chevron-right" />
+      <span class="visually-hidden">Next page</span>
+    </button>
+  } @else {
+    <p class="pagination__summary" aria-live="polite">
+      Showing {{ first() }}–{{ last() }} of {{ totalCount() }} {{ noun() }}
+    </p>
+    <button
+      type="button"
+      class="icon-button icon-button--md"
+      [disabled]="page() <= 1"
+      (click)="go(page() - 1)"
+    >
+      <a-icon name="chevron-left" />
+      <span class="visually-hidden">Previous page</span>
+    </button>
+    @for (slot of slots(); track $index) {
+      @if (slot === 'gap') {
+        <span class="pagination__gap" aria-hidden="true">…</span>
+      } @else {
+        <button
+          type="button"
+          class="pagination__page-button"
+          [class.pagination__page-button--current]="slot === page()"
+          [attr.aria-current]="slot === page() ? 'page' : null"
+          [attr.aria-label]="'Page ' + slot"
+          (click)="go(slot)"
+        >
+          {{ slot }}
+        </button>
+      }
+    }
+    <button
+      type="button"
+      class="icon-button icon-button--md"
+      [disabled]="page() >= pageCount()"
+      (click)="go(page() + 1)"
+    >
+      <a-icon name="chevron-right" />
+      <span class="visually-hidden">Next page</span>
+    </button>
+  }
+</nav>

@@ -1,0 +1,85 @@
+@use 'breakpoints' as *;
+@use 'typography' as *;
+
+// Sales / Welcome / Default: mobile buttons are LG (44px) and full width; from md they are MD and
+// the profile sits beside the message.
+
+p {
+  @include body-md;
+}
+
+.welcome__cta,
+.welcome__link {
+  width: 100%;
+  min-height: var(--size-control-lg);
+  padding: 0 var(--spacing-5);
+  @include body-md-strong;
+
+  @media (min-width: $breakpoint-md) {
+    width: auto;
+    min-height: var(--size-control-md);
+    padding: 0 var(--spacing-4);
+    @include body-sm-strong;
+  }
+}
+
+.welcome__cta-icon,
+.welcome__link-icon {
+  @media (min-width: $breakpoint-md) {
+    width: var(--size-icon-sm);
+    height: var(--size-icon-sm);
+  }
+}
+
+.welcome__points {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-3);
+}
+
+.welcome__point {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--spacing-3);
+  @include body-md;
+}
+
+.welcome__bullet {
+  margin-top: 2px;
+  color: var(--color-success);
+}
+
+.welcome__profile {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-5);
+  width: 100%;
+
+  @media (min-width: $breakpoint-md) {
+    flex-direction: row;
+    align-items: flex-start;
+  }
+}
+
+.welcome__message {
+  display: flex;
+  flex: 1 1 0;
+  flex-direction: column;
+  gap: var(--spacing-3);
+  min-width: 0;
+}
+
+.welcome__signature {
+  @include body-sm-strong;
+  color: var(--color-text-muted);
+}
+
+.welcome__links {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-3);
+
+  @media (min-width: $breakpoint-md) {
+    flex-direction: row;
+  }
+}

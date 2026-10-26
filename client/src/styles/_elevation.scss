@@ -1,0 +1,11 @@
+@use 'colors' as *;
+
+// Layer 2 — elevation and focus tokens. Mirrors the Figma effect styles Elevation/Card,
+// Elevation/Dropdown, Elevation/Modal and Focus/Ring.
+
+:root {
+  --elevation-card: 0 1px 2px #{rgba($espresso, 0.06)}, 0 4px 16px #{rgba($espresso, 0.06)};
+  --elevation-dropdown: 0 2px 6px #{rgba($espresso, 0.08)}, 0 8px 24px #{rgba($espresso, 0.14)};
+  --elevation-modal: 0 24px 48px #{rgba($espresso, 0.22)};
+  --focus-ring: 0 0 0 var(--border-width-focus-ring) var(--color-focus-ring);
+}

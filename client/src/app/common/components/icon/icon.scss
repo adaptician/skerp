@@ -1,0 +1,22 @@
+// The SVG is used as a mask so the icon takes the host's text colour (currentColor).
+:host {
+  display: inline-block;
+  flex-shrink: 0;
+  background-color: currentColor;
+  mask: var(--icon-url) center / contain no-repeat;
+}
+
+:host(.icon--sm) {
+  width: var(--size-icon-sm);
+  height: var(--size-icon-sm);
+}
+
+:host(.icon--md) {
+  width: var(--size-icon-md);
+  height: var(--size-icon-md);
+}
+
+:host(.icon--lg) {
+  width: var(--size-icon-lg);
+  height: var(--size-icon-lg);
+}

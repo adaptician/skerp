@@ -1,0 +1,85 @@
+@use 'breakpoints' as *;
+@use 'typography' as *;
+
+// The list screen frames: a full-width column (1272px at the 1400px desktop frame).
+:host {
+  display: block;
+  width: 100%;
+
+  // The desktop list frame starts the title 40px under the header; the shell pads 48px.
+  @media (min-width: $breakpoint-xl) {
+    margin-top: calc(var(--spacing-10) - var(--spacing-12));
+  }
+}
+
+.po-page {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-5);
+  min-width: 0;
+
+  @media (min-width: $breakpoint-lg) {
+    gap: var(--spacing-6);
+  }
+}
+
+.po-page__title-row {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-4);
+
+  @media (min-width: $breakpoint-lg) {
+    flex-direction: row;
+    align-items: center;
+  }
+}
+
+.po-page__title {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  gap: var(--spacing-1);
+  min-width: 0;
+}
+
+.po-page__heading {
+  margin: 0;
+  color: var(--color-text-strong);
+  @include heading-h2;
+
+  @media (min-width: $breakpoint-lg) {
+    @include heading-h1;
+  }
+}
+
+.po-page__description {
+  margin: 0;
+  color: var(--color-text-muted);
+  @include body-md;
+}
+
+.po-page__actions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-3);
+  align-items: flex-start;
+  min-width: 0;
+
+  @media (min-width: $breakpoint-lg) {
+    flex-direction: row;
+    flex-shrink: 0;
+    gap: var(--spacing-5);
+    align-items: center;
+  }
+}
+
+.po-page__new {
+  flex-shrink: 0;
+
+  // Below lg: a full-width 44px button under the title (list md and mobile frames).
+  @media (max-width: ($breakpoint-lg - 1px)) {
+    width: 100%;
+    min-height: var(--size-control-lg);
+    @include body-md-strong;
+  }
+}

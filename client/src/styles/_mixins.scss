@@ -1,0 +1,24 @@
+// Shared mixins.
+
+// The focus treatment every interactive control uses (designer prompt → Interactive states): the
+// resting look plus a border-focus edge at the emphasis width, and the 3px focus ring outside it.
+// Drawn with box-shadow so it never shifts layout and follows the control's border radius.
+@mixin focus-ring {
+  outline: none;
+  box-shadow:
+    inset 0 0 0 var(--border-width-emphasis) var(--color-border-focus),
+    var(--focus-ring);
+}
+
+// Hides content visually while keeping it available to assistive technology.
+@mixin visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}

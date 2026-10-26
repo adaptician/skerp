@@ -1,0 +1,517 @@
+{
+  "$comment": "The only citable source of Figma node IDs for the files listed under \"files\". Format and rules: .agents/standards/solution/figma.md. Declare this solution's \"themes\" (first key segment) and \"breakpoints\" (last key segment) once it has screens; an empty list means any slug segment is accepted. Validated offline by .agents/scripts/check-screen-index.mjs.",
+  "version": 1,
+  "themes": [
+    "sales"
+  ],
+  "breakpoints": [
+    "desktop",
+    "lg",
+    "md",
+    "mobile"
+  ],
+  "files": {
+    "skerp": {
+      "name": "Skerp",
+      "fileKey": "yzLk80i2s6D2NaP0CO0Irc",
+      "url": "https://www.figma.com/design/yzLk80i2s6D2NaP0CO0Irc/Skerp",
+      "screens": {
+        "sales/welcome/default/desktop": {
+          "node": "26:2",
+          "name": "Sales / Welcome / Default / Desktop",
+          "approved": {
+            "by": "Tyler Pieterse",
+            "on": "2026-10-22",
+            "fingerprint": "fp1:434faafce5b4519a"
+          }
+        },
+        "sales/welcome/default/mobile": {
+          "node": "26:149",
+          "name": "Sales / Welcome / Default / Mobile",
+          "approved": {
+            "by": "Tyler Pieterse",
+            "on": "2026-10-22",
+            "fingerprint": "fp1:0643623e297e8d0f"
+          }
+        },
+        "sales/welcome/menu-open/mobile": {
+          "node": "26:279",
+          "name": "Sales / Welcome / Menu Open / Mobile",
+          "approved": {
+            "by": "Tyler Pieterse",
+            "on": "2026-10-22",
+            "fingerprint": "fp1:f0e1aaba7ec6218b"
+          }
+        },
+        "sales/purchase-orders/list/desktop": {
+          "node": "28:316",
+          "name": "Sales / Purchase Orders / List / Desktop",
+          "approved": {
+            "by": "Tyler Pieterse",
+            "on": "2026-10-22",
+            "fingerprint": "fp1:a4a608ba5f90c4e0"
+          }
+        },
+        "sales/purchase-orders/row-expanded/desktop": {
+          "node": "30:714",
+          "name": "Sales / Purchase Orders / Row Expanded / Desktop",
+          "approved": {
+            "by": "Tyler Pieterse",
+            "on": "2026-10-22",
+            "fingerprint": "fp1:5987433fc83d445e"
+          }
+        },
+        "sales/purchase-orders/filters-open/desktop": {
+          "node": "30:1309",
+          "name": "Sales / Purchase Orders / Filters Open / Desktop",
+          "approved": {
+            "by": "Tyler Pieterse",
+            "on": "2026-10-22",
+            "fingerprint": "fp1:0e85236a100a1f2e"
+          }
+        },
+        "sales/purchase-orders/empty/desktop": {
+          "node": "30:1978",
+          "name": "Sales / Purchase Orders / Empty / Desktop",
+          "approved": {
+            "by": "Tyler Pieterse",
+            "on": "2026-10-22",
+            "fingerprint": "fp1:a20a0e85422a6624"
+          }
+        },
+        "sales/purchase-orders/loading/desktop": {
+          "node": "31:1797",
+          "name": "Sales / Purchase Orders / Loading / Desktop",
+          "approved": {
+            "by": "Tyler Pieterse",
+            "on": "2026-10-22",
+            "fingerprint": "fp1:b97447ec755689c6"
+          }
+        },
+        "sales/purchase-orders/status-control/desktop": {
+          "node": "31:2084",
+          "name": "Sales / Purchase Orders / Status Control / Desktop",
+          "approved": {
+            "by": "Tyler Pieterse",
+            "on": "2026-10-22",
+            "fingerprint": "fp1:6ff30ccfaa0ae99d"
+          }
+        },
+        "sales/purchase-orders/status-control-demo-mode/desktop": {
+          "node": "31:2657",
+          "name": "Sales / Purchase Orders / Status Control Demo Mode / Desktop",
+          "approved": {
+            "by": "Tyler Pieterse",
+            "on": "2026-10-22",
+            "fingerprint": "fp1:17408b1923fc1569"
+          }
+        },
+        "sales/purchase-orders/actions-open/desktop": {
+          "node": "31:3187",
+          "name": "Sales / Purchase Orders / Actions Open / Desktop",
+          "approved": {
+            "by": "Tyler Pieterse",
+            "on": "2026-10-22",
+            "fingerprint": "fp1:47f0b7919e03482a"
+          }
+        },
+        "sales/purchase-orders/actions-open-locked/desktop": {
+          "node": "32:3183",
+          "name": "Sales / Purchase Orders / Actions Open Locked / Desktop",
+          "approved": {
+            "by": "Tyler Pieterse",
+            "on": "2026-10-22",
+            "fingerprint": "fp1:9078b1328bfe53e6"
+          }
+        },
+        "sales/purchase-orders/delete-confirm/desktop": {
+          "node": "32:3685",
+          "name": "Sales / Purchase Orders / Delete Confirm / Desktop",
+          "approved": {
+            "by": "Tyler Pieterse",
+            "on": "2026-10-22",
+            "fingerprint": "fp1:771bd7db32d33e0c"
+          }
+        },
+        "sales/purchase-orders/error/desktop": {
+          "node": "32:4151",
+          "name": "Sales / Purchase Orders / Error / Desktop",
+          "approved": {
+            "by": "Tyler Pieterse",
+            "on": "2026-10-22",
+            "fingerprint": "fp1:68ba590252d17853"
+          }
+        },
+        "sales/purchase-orders/list/lg": {
+          "node": "32:4605",
+          "name": "Sales / Purchase Orders / List / LG",
+          "approved": {
+            "by": "Tyler Pieterse",
+            "on": "2026-10-22",
+            "fingerprint": "fp1:feb56f0b58133469"
+          }
+        },
+        "sales/purchase-orders/list/md": {
+          "node": "32:5047",
+          "name": "Sales / Purchase Orders / List / MD",
+          "approved": {
+            "by": "Tyler Pieterse",
+            "on": "2026-10-22",
+            "fingerprint": "fp1:c216c36c24612c42"
+          }
+        },
+        "sales/purchase-orders/list/mobile": {
+          "node": "33:4809",
+          "name": "Sales / Purchase Orders / List / Mobile",
+          "approved": {
+            "by": "Tyler Pieterse",
+            "on": "2026-10-22",
+            "fingerprint": "fp1:156c780ae0409b46"
+          }
+        },
+        "sales/purchase-orders/row-expanded/mobile": {
+          "node": "33:4988",
+          "name": "Sales / Purchase Orders / Row Expanded / Mobile",
+          "approved": {
+            "by": "Tyler Pieterse",
+            "on": "2026-10-22",
+            "fingerprint": "fp1:2e7f7ee8efa4147c"
+          }
+        },
+        "sales/purchase-orders/filters-open/mobile": {
+          "node": "33:5228",
+          "name": "Sales / Purchase Orders / Filters Open / Mobile",
+          "approved": {
+            "by": "Tyler Pieterse",
+            "on": "2026-10-22",
+            "fingerprint": "fp1:c8b23deb0ea7d637"
+          }
+        },
+        "sales/purchase-orders/empty/mobile": {
+          "node": "33:5551",
+          "name": "Sales / Purchase Orders / Empty / Mobile",
+          "approved": {
+            "by": "Tyler Pieterse",
+            "on": "2026-10-22",
+            "fingerprint": "fp1:23d8e2834581f69a"
+          }
+        },
+        "sales/purchase-orders/loading/mobile": {
+          "node": "33:5628",
+          "name": "Sales / Purchase Orders / Loading / Mobile",
+          "approved": {
+            "by": "Tyler Pieterse",
+            "on": "2026-10-22",
+            "fingerprint": "fp1:fa23ec23819931bb"
+          }
+        },
+        "sales/purchase-orders/status-control/mobile": {
+          "node": "33:5727",
+          "name": "Sales / Purchase Orders / Status Control / Mobile",
+          "approved": {
+            "by": "Tyler Pieterse",
+            "on": "2026-10-22",
+            "fingerprint": "fp1:e9b78d7c167a7475"
+          }
+        },
+        "sales/purchase-orders/status-control-demo-mode/mobile": {
+          "node": "34:5650",
+          "name": "Sales / Purchase Orders / Status Control Demo Mode / Mobile",
+          "approved": {
+            "by": "Tyler Pieterse",
+            "on": "2026-10-22",
+            "fingerprint": "fp1:157178c7ab051071"
+          }
+        },
+        "sales/purchase-orders/actions-open/mobile": {
+          "node": "34:5948",
+          "name": "Sales / Purchase Orders / Actions Open / Mobile",
+          "approved": {
+            "by": "Tyler Pieterse",
+            "on": "2026-10-22",
+            "fingerprint": "fp1:71f9e1226b1ce77c"
+          }
+        },
+        "sales/purchase-orders/actions-open-locked/mobile": {
+          "node": "34:6167",
+          "name": "Sales / Purchase Orders / Actions Open Locked / Mobile",
+          "approved": {
+            "by": "Tyler Pieterse",
+            "on": "2026-10-22",
+            "fingerprint": "fp1:68a0228b1a094030"
+          }
+        },
+        "sales/purchase-orders/delete-confirm/mobile": {
+          "node": "34:6380",
+          "name": "Sales / Purchase Orders / Delete Confirm / Mobile",
+          "approved": {
+            "by": "Tyler Pieterse",
+            "on": "2026-10-22",
+            "fingerprint": "fp1:4fa1dc5b71e1e4d5"
+          }
+        },
+        "sales/purchase-orders/error/mobile": {
+          "node": "34:6575",
+          "name": "Sales / Purchase Orders / Error / Mobile",
+          "approved": {
+            "by": "Tyler Pieterse",
+            "on": "2026-10-22",
+            "fingerprint": "fp1:9ca5df8e8a8c357f"
+          }
+        },
+        "sales/purchase-orders/create-modal/desktop": {
+          "node": "35:6421",
+          "name": "Sales / Purchase Orders / Create Modal / Desktop",
+          "approved": {
+            "by": "Tyler Pieterse",
+            "on": "2026-10-22",
+            "fingerprint": "fp1:9c07da2c49af2454"
+          }
+        },
+        "sales/purchase-orders/create-modal-filled/desktop": {
+          "node": "35:7114",
+          "name": "Sales / Purchase Orders / Create Modal Filled / Desktop",
+          "approved": {
+            "by": "Tyler Pieterse",
+            "on": "2026-10-22",
+            "fingerprint": "fp1:64f777c7b3b5615d"
+          }
+        },
+        "sales/purchase-orders/create-modal/mobile": {
+          "node": "35:7949",
+          "name": "Sales / Purchase Orders / Create Modal / Mobile",
+          "approved": {
+            "by": "Tyler Pieterse",
+            "on": "2026-10-22",
+            "fingerprint": "fp1:5aa4084b9027ab56"
+          }
+        },
+        "sales/purchase-orders/create-modal-filled/mobile": {
+          "node": "35:8241",
+          "name": "Sales / Purchase Orders / Create Modal Filled / Mobile",
+          "approved": {
+            "by": "Tyler Pieterse",
+            "on": "2026-10-22",
+            "fingerprint": "fp1:94cbb7c44ff18fee"
+          }
+        },
+        "sales/purchase-orders/create-modal-reference-available/desktop": {
+          "node": "36:7952",
+          "name": "Sales / Purchase Orders / Create Modal Reference Available / Desktop",
+          "approved": {
+            "by": "Tyler Pieterse",
+            "on": "2026-10-22",
+            "fingerprint": "fp1:0c00aa257bcad527"
+          }
+        },
+        "sales/purchase-orders/create-modal-reference-exists/desktop": {
+          "node": "36:8613",
+          "name": "Sales / Purchase Orders / Create Modal Reference Exists / Desktop",
+          "approved": {
+            "by": "Tyler Pieterse",
+            "on": "2026-10-22",
+            "fingerprint": "fp1:b0018cc2097fe93a"
+          }
+        },
+        "sales/purchase-orders/create-modal-customer-search/desktop": {
+          "node": "36:9237",
+          "name": "Sales / Purchase Orders / Create Modal Customer Search / Desktop",
+          "approved": {
+            "by": "Tyler Pieterse",
+            "on": "2026-10-22",
+            "fingerprint": "fp1:877e25d7950f36e1"
+          }
+        },
+        "sales/purchase-orders/create-modal-customer-selected/desktop": {
+          "node": "36:9871",
+          "name": "Sales / Purchase Orders / Create Modal Customer Selected / Desktop",
+          "approved": {
+            "by": "Tyler Pieterse",
+            "on": "2026-10-22",
+            "fingerprint": "fp1:77a9b3f2f9f176d4"
+          }
+        },
+        "sales/purchase-orders/create-modal-new-customer/desktop": {
+          "node": "36:10491",
+          "name": "Sales / Purchase Orders / Create Modal New Customer / Desktop",
+          "approved": {
+            "by": "Tyler Pieterse",
+            "on": "2026-10-22",
+            "fingerprint": "fp1:d216251b99aceb2c"
+          }
+        },
+        "sales/purchase-orders/create-modal-product-selected/desktop": {
+          "node": "38:10451",
+          "name": "Sales / Purchase Orders / Create Modal Product Selected / Desktop",
+          "approved": {
+            "by": "Tyler Pieterse",
+            "on": "2026-10-22",
+            "fingerprint": "fp1:332213f53b6b62fc"
+          }
+        },
+        "sales/purchase-orders/create-modal-validation-errors/desktop": {
+          "node": "38:11244",
+          "name": "Sales / Purchase Orders / Create Modal Validation Errors / Desktop",
+          "approved": {
+            "by": "Tyler Pieterse",
+            "on": "2026-10-22",
+            "fingerprint": "fp1:b3c49027a2235f37"
+          }
+        },
+        "sales/purchase-orders/create-modal-calculating/desktop": {
+          "node": "38:11914",
+          "name": "Sales / Purchase Orders / Create Modal Calculating / Desktop",
+          "approved": {
+            "by": "Tyler Pieterse",
+            "on": "2026-10-22",
+            "fingerprint": "fp1:7b03d405e629849f"
+          }
+        },
+        "sales/purchase-orders/create-modal-save-disabled/desktop": {
+          "node": "38:12752",
+          "name": "Sales / Purchase Orders / Create Modal Save Disabled / Desktop",
+          "approved": {
+            "by": "Tyler Pieterse",
+            "on": "2026-10-22",
+            "fingerprint": "fp1:9b73bfcfb37b318c"
+          }
+        },
+        "sales/purchase-orders/create-modal-demo-mode-duplicate/desktop": {
+          "node": "38:13586",
+          "name": "Sales / Purchase Orders / Create Modal Demo Mode Duplicate / Desktop",
+          "approved": {
+            "by": "Tyler Pieterse",
+            "on": "2026-10-22",
+            "fingerprint": "fp1:2d9791e57129414e"
+          }
+        },
+        "sales/purchase-orders/edit-modal/desktop": {
+          "node": "38:14423",
+          "name": "Sales / Purchase Orders / Edit Modal / Desktop",
+          "approved": {
+            "by": "Tyler Pieterse",
+            "on": "2026-10-22",
+            "fingerprint": "fp1:1b0277ddc8bca9ce"
+          }
+        },
+        "sales/purchase-orders/edit-modal-line-removed/desktop": {
+          "node": "38:15217",
+          "name": "Sales / Purchase Orders / Edit Modal Line Removed / Desktop",
+          "approved": {
+            "by": "Tyler Pieterse",
+            "on": "2026-10-22",
+            "fingerprint": "fp1:9fa865287deb8fae"
+          }
+        },
+        "sales/purchase-orders/create-modal-reference-available/mobile": {
+          "node": "40:14320",
+          "name": "Sales / Purchase Orders / Create Modal Reference Available / Mobile",
+          "approved": {
+            "by": "Tyler Pieterse",
+            "on": "2026-10-22",
+            "fingerprint": "fp1:79ccb63aa479c0ff"
+          }
+        },
+        "sales/purchase-orders/create-modal-reference-exists/mobile": {
+          "node": "40:14573",
+          "name": "Sales / Purchase Orders / Create Modal Reference Exists / Mobile",
+          "approved": {
+            "by": "Tyler Pieterse",
+            "on": "2026-10-22",
+            "fingerprint": "fp1:3d7ec965f219f638"
+          }
+        },
+        "sales/purchase-orders/create-modal-customer-search/mobile": {
+          "node": "40:14800",
+          "name": "Sales / Purchase Orders / Create Modal Customer Search / Mobile",
+          "approved": {
+            "by": "Tyler Pieterse",
+            "on": "2026-10-22",
+            "fingerprint": "fp1:2172500e9ad1e3ca"
+          }
+        },
+        "sales/purchase-orders/create-modal-customer-selected/mobile": {
+          "node": "40:15033",
+          "name": "Sales / Purchase Orders / Create Modal Customer Selected / Mobile",
+          "approved": {
+            "by": "Tyler Pieterse",
+            "on": "2026-10-22",
+            "fingerprint": "fp1:56605c08694d246d"
+          }
+        },
+        "sales/purchase-orders/create-modal-new-customer/mobile": {
+          "node": "40:15258",
+          "name": "Sales / Purchase Orders / Create Modal New Customer / Mobile",
+          "approved": {
+            "by": "Tyler Pieterse",
+            "on": "2026-10-22",
+            "fingerprint": "fp1:851414688504e402"
+          }
+        },
+        "sales/purchase-orders/create-modal-product-selected/mobile": {
+          "node": "40:15479",
+          "name": "Sales / Purchase Orders / Create Modal Product Selected / Mobile",
+          "approved": {
+            "by": "Tyler Pieterse",
+            "on": "2026-10-22",
+            "fingerprint": "fp1:200e1d5be49eff4d"
+          }
+        },
+        "sales/purchase-orders/create-modal-validation-errors/mobile": {
+          "node": "41:15239",
+          "name": "Sales / Purchase Orders / Create Modal Validation Errors / Mobile",
+          "approved": {
+            "by": "Tyler Pieterse",
+            "on": "2026-10-22",
+            "fingerprint": "fp1:12d80109e1aaa067"
+          }
+        },
+        "sales/purchase-orders/create-modal-calculating/mobile": {
+          "node": "41:15544",
+          "name": "Sales / Purchase Orders / Create Modal Calculating / Mobile",
+          "approved": {
+            "by": "Tyler Pieterse",
+            "on": "2026-10-22",
+            "fingerprint": "fp1:ff9fc0b415c0df16"
+          }
+        },
+        "sales/purchase-orders/create-modal-save-disabled/mobile": {
+          "node": "41:16020",
+          "name": "Sales / Purchase Orders / Create Modal Save Disabled / Mobile",
+          "approved": {
+            "by": "Tyler Pieterse",
+            "on": "2026-10-22",
+            "fingerprint": "fp1:c8653894c51281c8"
+          }
+        },
+        "sales/purchase-orders/create-modal-demo-mode-duplicate/mobile": {
+          "node": "41:16487",
+          "name": "Sales / Purchase Orders / Create Modal Demo Mode Duplicate / Mobile",
+          "approved": {
+            "by": "Tyler Pieterse",
+            "on": "2026-10-22",
+            "fingerprint": "fp1:aa57e5821181f901"
+          }
+        },
+        "sales/purchase-orders/edit-modal/mobile": {
+          "node": "41:16954",
+          "name": "Sales / Purchase Orders / Edit Modal / Mobile",
+          "approved": {
+            "by": "Tyler Pieterse",
+            "on": "2026-10-22",
+            "fingerprint": "fp1:f407db36f92e44f2"
+          }
+        },
+        "sales/purchase-orders/edit-modal-line-removed/mobile": {
+          "node": "41:17381",
+          "name": "Sales / Purchase Orders / Edit Modal Line Removed / Mobile",
+          "approved": {
+            "by": "Tyler Pieterse",
+            "on": "2026-10-22",
+            "fingerprint": "fp1:36755d908dcfda8f"
+          }
+        }
+      }
+    }
+  }
+}

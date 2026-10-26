@@ -1,0 +1,8 @@
+// Responsive breakpoints (styling.md → Responsive Breakpoints). Mandated values; mobile first,
+// ascending min-width. Compile-time only: a @media condition cannot read a custom property.
+
+$breakpoint-sm: 576px;
+$breakpoint-md: 768px;
+$breakpoint-lg: 992px;
+$breakpoint-xl: 1200px;
+$breakpoint-xxl: 1400px;

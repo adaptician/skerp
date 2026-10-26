@@ -1,0 +1,87 @@
+<div class="field">
+  <span class="field__label" [id]="id + '-label'">Created</span>
+  @if (inline()) {
+    <div class="date-range__inputs" role="group" [attr.aria-labelledby]="id + '-label'">
+      <ng-container [ngTemplateOutlet]="inputs" />
+    </div>
+    @if (invalid()) {
+      <p class="field__error">
+        <a-icon name="error" size="sm" />The start date must be on or before the end date.
+      </p>
+    }
+  } @else {
+    <div class="date-range">
+      <button
+        type="button"
+        class="field__control date-range__trigger"
+        [class.date-range__trigger--open]="open()"
+        [attr.aria-labelledby]="id + '-label ' + id + '-value'"
+        [attr.aria-expanded]="open()"
+        [attr.aria-controls]="id + '-panel'"
+        (click)="toggleOpen()"
+      >
+        <span [id]="id + '-value'" [class.date-range__placeholder]="!display()">{{
+          display() ?? 'Any date'
+        }}</span>
+        <a-icon class="field__icon" name="calendar" />
+      </button>
+      @if (open()) {
+        <div
+          class="date-range__panel"
+          [id]="id + '-panel'"
+          role="group"
+          [attr.aria-labelledby]="id + '-label'"
+        >
+          <div class="date-range__inputs">
+            <ng-container [ngTemplateOutlet]="inputs" />
+          </div>
+          @if (invalid()) {
+            <p class="field__error">
+              <a-icon name="error" size="sm" />The start date must be on or before the end date.
+            </p>
+          }
+          <div class="date-range__actions">
+            <button type="button" class="button button--secondary button--sm" (click)="clear()">
+              Clear
+            </button>
+            <button
+              type="button"
+              class="button button--primary button--sm"
+              [disabled]="invalid()"
+              (click)="apply()"
+            >
+              Apply
+            </button>
+          </div>
+        </div>
+      }
+    </div>
+  }
+</div>
+
+<ng-template #inputs>
+  <label class="date-range__input">
+    <span class="date-range__input-label">From</span>
+    <span class="field__control" [class.field__control--error]="invalid()">
+      <input
+        class="field__input"
+        type="date"
+        [value]="draftFrom() ?? ''"
+        [attr.aria-invalid]="invalid()"
+        (change)="setFrom($any($event.target).value)"
+      />
+    </span>
+  </label>
+  <label class="date-range__input">
+    <span class="date-range__input-label">To</span>
+    <span class="field__control" [class.field__control--error]="invalid()">
+      <input
+        class="field__input"
+        type="date"
+        [value]="draftTo() ?? ''"
+        [attr.aria-invalid]="invalid()"
+        (change)="setTo($any($event.target).value)"
+      />
+    </span>
+  </label>
+</ng-template>

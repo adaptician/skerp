@@ -1,0 +1,63 @@
+<button
+  type="button"
+  class="action-menu__trigger"
+  [class.action-menu__trigger--kebab]="variant() === 'kebab'"
+  [class.action-menu__trigger--open]="open()"
+  aria-haspopup="menu"
+  [attr.aria-expanded]="open()"
+  [attr.aria-controls]="menuId"
+  [attr.aria-label]="label()"
+  (click)="toggle()"
+>
+  @if (variant() === 'kebab') {
+    <a-icon name="more-vertical" />
+  } @else {
+    Actions
+    <a-icon [name]="open() ? 'chevron-up' : 'chevron-down'" size="sm" />
+  }
+</button>
+@if (open()) {
+  <div
+    class="action-menu__menu"
+    role="menu"
+    tabindex="-1"
+    [id]="menuId"
+    (keydown)="onMenuKeydown($event)"
+  >
+    @for (item of regularItems(); track item.id) {
+      <button
+        #menuItem
+        type="button"
+        class="action-menu__item"
+        role="menuitem"
+        [attr.aria-disabled]="item.disabled ? 'true' : null"
+        [attr.title]="item.disabled ? (item.disabledReason ?? null) : null"
+        (click)="choose(item)"
+      >
+        <a-icon [name]="item.icon" size="sm" />{{ item.label }}
+        @if (item.disabled && item.disabledReason) {
+          <span class="visually-hidden">. {{ item.disabledReason }}</span>
+        }
+      </button>
+    }
+    @if (dangerItems().length > 0 && regularItems().length > 0) {
+      <div class="action-menu__divider" role="separator"></div>
+    }
+    @for (item of dangerItems(); track item.id) {
+      <button
+        #menuItem
+        type="button"
+        class="action-menu__item action-menu__item--danger"
+        role="menuitem"
+        [attr.aria-disabled]="item.disabled ? 'true' : null"
+        [attr.title]="item.disabled ? (item.disabledReason ?? null) : null"
+        (click)="choose(item)"
+      >
+        <a-icon [name]="item.icon" size="sm" />{{ item.label }}
+        @if (item.disabled && item.disabledReason) {
+          <span class="visually-hidden">. {{ item.disabledReason }}</span>
+        }
+      </button>
+    }
+  </div>
+}

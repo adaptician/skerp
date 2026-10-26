@@ -1,0 +1,66 @@
+<section
+  class="line-items-panel"
+  [attr.aria-label]="label()"
+  [attr.aria-busy]="state()?.loading ?? true"
+>
+  @if (layout() === 'table') {
+    <table class="line-items-panel__table">
+      <thead>
+        <tr>
+          <th scope="col" class="line-items-panel__sku">SKU</th>
+          <th scope="col">Product</th>
+          <th scope="col" class="line-items-panel__number line-items-panel__qty">Qty</th>
+          <th scope="col" class="line-items-panel__number line-items-panel__amount">Price</th>
+          <th scope="col" class="line-items-panel__number line-items-panel__amount">Sub-total</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (line of state()?.items ?? []; track line.id) {
+          <tr>
+            <td class="line-items-panel__sku-value">{{ line.sku }}</td>
+            <td>{{ line.name }}</td>
+            <td class="line-items-panel__number">{{ line.quantity }}</td>
+            <td class="line-items-panel__number">{{ line.price | money: symbol() }}</td>
+            <td class="line-items-panel__number line-items-panel__subtotal">
+              {{ line.total | money: symbol() }}
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  } @else {
+    <ul class="line-items-panel__list">
+      @for (line of state()?.items ?? []; track line.id) {
+        <li class="line-items-panel__card-line">
+          <span class="line-items-panel__card-text">
+            <span class="line-items-panel__card-product">{{ line.sku }} · {{ line.name }}</span>
+            <span class="line-items-panel__card-meta"
+              >{{ line.quantity }} × {{ line.price | money: symbol() }}</span
+            >
+          </span>
+          <span class="line-items-panel__subtotal">{{ line.total | money: symbol() }}</span>
+        </li>
+      }
+    </ul>
+  }
+
+  @if (state()?.loading) {
+    <p class="line-items-panel__status"><a-icon name="loader" size="sm" />Loading line items…</p>
+  } @else if (state()?.failed) {
+    <p class="line-items-panel__status line-items-panel__status--error">
+      <a-icon name="error" size="sm" />The line items could not be loaded.
+    </p>
+  }
+
+  @if (hasMore() && !state()?.loading) {
+    <div class="line-items-panel__footer">
+      <button type="button" class="line-items-panel__load-more" (click)="loadMore.emit(loaded())">
+        <a-icon name="chevron-down" [size]="layout() === 'card' ? 'md' : 'sm'" />Load more line
+        items
+      </button>
+      <span class="line-items-panel__count"
+        >Showing {{ loaded() }} of {{ state()?.totalCount }}</span
+      >
+    </div>
+  }
+</section>

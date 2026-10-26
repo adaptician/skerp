@@ -1,0 +1,67 @@
+<div class="header__bar">
+  <a class="header__home" routerLink="/" aria-label="Sharp ERP home" (click)="closeMenu()">
+    <a-brand-lockup />
+  </a>
+
+  <nav class="header__menu" aria-label="Main">
+    <ul class="header__menu-list">
+      @for (item of items(); track item.link) {
+        <li>
+          <a
+            class="menu-item"
+            [routerLink]="item.link"
+            routerLinkActive="menu-item--active"
+            ariaCurrentWhenActive="page"
+            [routerLinkActiveOptions]="{ exact: item.exact ?? false }"
+          >
+            <a-icon [name]="item.icon" />
+            <span>{{ item.label }}</span>
+          </a>
+        </li>
+      }
+    </ul>
+  </nav>
+
+  <span class="header__spacer"></span>
+
+  <a-toggle
+    label="Demo Mode"
+    [checked]="demoMode()"
+    (checkedChange)="demoModeChange.emit($event)"
+  />
+
+  <button
+    #menuButton
+    type="button"
+    class="icon-button icon-button--lg header__menu-button"
+    aria-controls="header-menu-panel"
+    [attr.aria-expanded]="menuOpen()"
+    (click)="toggleMenu()"
+  >
+    <a-icon [name]="menuOpen() ? 'close' : 'menu'" />
+    <span class="visually-hidden">{{ menuOpen() ? 'Close menu' : 'Open menu' }}</span>
+  </button>
+</div>
+
+@if (menuOpen()) {
+  <nav id="header-menu-panel" class="header__panel" aria-label="Main">
+    <ul class="header__panel-list">
+      @for (item of items(); track item.link) {
+        <li>
+          <a
+            class="menu-item menu-item--row"
+            [routerLink]="item.link"
+            routerLinkActive="menu-item--active"
+            ariaCurrentWhenActive="page"
+            [routerLinkActiveOptions]="{ exact: item.exact ?? false }"
+            (click)="closeMenu()"
+          >
+            <a-icon [name]="item.icon" />
+            <span>{{ item.label }}</span>
+          </a>
+        </li>
+      }
+    </ul>
+  </nav>
+  <div class="header__scrim" aria-hidden="true" (click)="closeMenu(true)"></div>
+}

@@ -1,0 +1,55 @@
+<div class="page-column">
+  <a-card eyebrow="Welcome" title="Welcome to Sharp ERP">
+    <p>
+      Sharp ERP is a focused slice of an ERP system for a small sales team. Create customer purchase
+      orders with their line items, find any order in seconds with search and filters, and move each
+      order through its lifecycle — Pending, Confirmed, Fulfilled or Cancelled.
+    </p>
+    <a class="button button--primary welcome__cta" routerLink="/purchase-orders">
+      <a-icon name="orders" class="welcome__cta-icon" />
+      View purchase orders
+    </a>
+  </a-card>
+
+  <a-card eyebrow="For reviewers" title="How Demo Mode works">
+    <p>
+      Demo Mode is a switch in the header for anyone reviewing this app. It shows what the server
+      does when the screen's helpful guard rails are taken away.
+    </p>
+    <a-toggle label="Demo Mode" [checked]="demoMode()" (checkedChange)="switchDemoMode($event)" />
+    <ul class="welcome__points">
+      @for (point of demoModePoints; track point) {
+        <li class="welcome__point">
+          <a-icon name="check" class="welcome__bullet" />
+          <span>{{ point }}</span>
+        </li>
+      }
+    </ul>
+  </a-card>
+
+  <a-card eyebrow="From the developer" title="Thank you">
+    <div class="welcome__profile">
+      <a-avatar [src]="developer.photoUrl" [alt]="developer.name" />
+      <div class="welcome__message">
+        <p>
+          Thank you for taking the time to look through Sharp ERP. I built it to show how I approach
+          clean architecture, careful UX, and dependable engineering — I hope you enjoy exploring it
+          as much as I enjoyed building it.
+        </p>
+        <p class="welcome__signature">— {{ developer.name }}, {{ developer.role }}</p>
+        <div class="welcome__links">
+          <a
+            class="button button--secondary welcome__link"
+            [href]="developer.linkedInUrl"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <a-icon name="linkedin" class="welcome__link-icon" />
+            LinkedIn
+            <span class="visually-hidden">(opens in a new tab)</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </a-card>
+</div>

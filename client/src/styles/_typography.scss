@@ -1,0 +1,133 @@
+// Typography (styling.md → Typography Scale). The scale was confirmed by the operator on
+// 2026-10-22: 12px to 40px, ratio ≈ 1.25. Sizes, line heights and families mirror the Figma
+// "Primitives" collection (WEB code syntax $font-size-*, $line-height-*, $font-family-*); the
+// mixins mirror the Figma text styles one-to-one.
+
+$font-size-xs: 12px;
+$font-size-sm: 14px;
+$font-size-md: 16px;
+$font-size-lg: 20px;
+$font-size-xl: 24px;
+$font-size-2xl: 32px;
+$font-size-3xl: 40px;
+
+$line-height-xs: 16px;
+$line-height-sm: 20px;
+$line-height-md: 24px;
+$line-height-lg: 28px;
+$line-height-xl: 32px;
+$line-height-2xl: 40px;
+$line-height-3xl: 48px;
+
+$font-family-body: 'Nunito Sans', 'Segoe UI', system-ui, sans-serif;
+$font-family-display: 'Fraunces', Georgia, 'Times New Roman', serif;
+
+$font-weight-regular: 400;
+$font-weight-semibold: 600;
+$font-weight-bold: 700;
+
+:root {
+  --font-family-body: #{$font-family-body};
+  --font-family-display: #{$font-family-display};
+}
+
+@mixin heading-h1 {
+  font-family: var(--font-family-display);
+  font-size: $font-size-3xl;
+  font-weight: $font-weight-semibold;
+  line-height: $line-height-3xl;
+  letter-spacing: -0.5px;
+}
+
+@mixin heading-h2 {
+  font-family: var(--font-family-display);
+  font-size: $font-size-2xl;
+  font-weight: $font-weight-semibold;
+  line-height: $line-height-2xl;
+  letter-spacing: -0.25px;
+}
+
+@mixin heading-h3 {
+  font-family: var(--font-family-display);
+  font-size: $font-size-xl;
+  font-weight: $font-weight-semibold;
+  line-height: $line-height-xl;
+  letter-spacing: 0;
+}
+
+@mixin heading-h4 {
+  font-family: var(--font-family-body);
+  font-size: $font-size-lg;
+  font-weight: $font-weight-bold;
+  line-height: $line-height-lg;
+  letter-spacing: 0;
+}
+
+@mixin body-md {
+  font-family: var(--font-family-body);
+  font-size: $font-size-md;
+  font-weight: $font-weight-regular;
+  line-height: $line-height-md;
+}
+
+@mixin body-md-strong {
+  @include body-md;
+  font-weight: $font-weight-semibold;
+}
+
+@mixin body-sm {
+  font-family: var(--font-family-body);
+  font-size: $font-size-sm;
+  font-weight: $font-weight-regular;
+  line-height: $line-height-sm;
+}
+
+@mixin body-sm-strong {
+  @include body-sm;
+  font-weight: $font-weight-semibold;
+}
+
+@mixin caption-regular {
+  font-family: var(--font-family-body);
+  font-size: $font-size-xs;
+  font-weight: $font-weight-regular;
+  line-height: $line-height-xs;
+}
+
+@mixin caption-strong {
+  @include caption-regular;
+  font-weight: $font-weight-bold;
+  letter-spacing: 0.2px;
+}
+
+@mixin caption-overline {
+  @include caption-regular;
+  font-weight: $font-weight-bold;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+// Numbers in tables and totals align: tabular figures (designer prompt; asmp-1463-tabular-figures).
+@mixin numeric-lg {
+  font-family: var(--font-family-body);
+  font-size: $font-size-lg;
+  font-weight: $font-weight-bold;
+  line-height: $line-height-lg;
+  font-variant-numeric: tabular-nums;
+}
+
+@mixin numeric-md {
+  font-family: var(--font-family-body);
+  font-size: $font-size-md;
+  font-weight: $font-weight-semibold;
+  line-height: $line-height-md;
+  font-variant-numeric: tabular-nums;
+}
+
+@mixin numeric-sm {
+  font-family: var(--font-family-body);
+  font-size: $font-size-sm;
+  font-weight: $font-weight-regular;
+  line-height: $line-height-sm;
+  font-variant-numeric: tabular-nums;
+}

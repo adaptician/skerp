@@ -1,0 +1,56 @@
+@use 'typography' as *;
+
+// Layer 3 — the health chip reuses the status-pill shape and the semantic colour pairs:
+// success for Live, danger for Disconnected, muted for Connecting.
+:host {
+  display: inline-flex;
+  min-width: 0;
+}
+
+.monitor-health {
+  display: inline-flex;
+  flex-shrink: 0;
+  gap: var(--spacing-1);
+  align-items: center;
+  padding: var(--spacing-1) var(--spacing-2);
+  border-radius: var(--border-radius-pill);
+  background: var(--monitor-health__background);
+  color: var(--monitor-health__text);
+  white-space: nowrap;
+  @include caption-strong;
+}
+
+.monitor-health--connecting {
+  --monitor-health__background: var(--color-surface-sunken);
+  --monitor-health__text: var(--color-text-muted);
+}
+
+.monitor-health--live {
+  --monitor-health__background: var(--color-success-muted);
+  --monitor-health__text: var(--color-success);
+}
+
+.monitor-health--disconnected {
+  --monitor-health__background: var(--color-danger-muted);
+  --monitor-health__text: var(--color-danger);
+}
+
+.monitor-health__dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+.monitor-health__alert {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-2) var(--spacing-3);
+  align-items: center;
+  min-width: 0;
+}
+
+.monitor-health__message {
+  color: var(--color-danger);
+  @include body-sm;
+}

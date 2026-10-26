@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <RootNamespace>Skerp.Domain</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- Persistence stamps the MinimumAudit fields; domain code cannot. -->
+    <InternalsVisibleTo Include="Skerp.Infrastructure" />
+    <InternalsVisibleTo Include="Skerp.Unit.Tests" />
+    <InternalsVisibleTo Include="Skerp.Integration.Tests" />
+  </ItemGroup>
+
+</Project>

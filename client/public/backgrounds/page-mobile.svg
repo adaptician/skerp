@@ -1,0 +1,34 @@
+<svg preserveAspectRatio="none" overflow="visible" style="display: block;" width="576" height="1000" viewBox="0 0 576 1000" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="Background/Page" clip-path="url(#clip0_0_8)">
+<rect width="576" height="1000" fill="#F6EFE5"/>
+<g id="Glow Clay" filter="url(#filter0_f_0_8)">
+<ellipse cx="115.2" cy="200" rx="172.8" ry="350" fill="#F5E2D8"/>
+</g>
+<g id="Glow Sage" filter="url(#filter1_f_0_8)">
+<ellipse cx="489.6" cy="725" rx="172.8" ry="375" fill="#E3EBDC"/>
+</g>
+<g id="Glow Wheat" filter="url(#filter2_f_0_8)">
+<ellipse cx="201.6" cy="850" rx="144" ry="250" fill="#F7EACB"/>
+</g>
+</g>
+<defs>
+<filter id="filter0_f_0_8" x="-217.6" y="-310" width="665.6" height="1020" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+<feFlood flood-opacity="0" result="BackgroundImageFix"/>
+<feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"/>
+<feGaussianBlur stdDeviation="80" result="effect1_foregroundBlur_0_8"/>
+</filter>
+<filter id="filter1_f_0_8" x="156.8" y="190" width="665.6" height="1070" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+<feFlood flood-opacity="0" result="BackgroundImageFix"/>
+<feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"/>
+<feGaussianBlur stdDeviation="80" result="effect1_foregroundBlur_0_8"/>
+</filter>
+<filter id="filter2_f_0_8" x="-102.4" y="440" width="608" height="820" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+<feFlood flood-opacity="0" result="BackgroundImageFix"/>
+<feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"/>
+<feGaussianBlur stdDeviation="80" result="effect1_foregroundBlur_0_8"/>
+</filter>
+<clipPath id="clip0_0_8">
+<rect width="576" height="1000" fill="white"/>
+</clipPath>
+</defs>
+</svg>

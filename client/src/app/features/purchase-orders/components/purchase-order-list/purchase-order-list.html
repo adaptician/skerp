@@ -1,0 +1,239 @@
+@if (wide()) {
+  <div class="po-table" [attr.aria-busy]="loading()">
+    <table class="po-table__table">
+      <thead>
+        <tr class="po-table__header">
+          @if (!monitor()) {
+            <th class="po-table__col-expand"><span class="visually-hidden">Expand</span></th>
+          }
+          <th class="po-table__col-reference" scope="col">Reference</th>
+          <th class="po-table__col-customer" scope="col">Customer</th>
+          <th class="po-table__col-total" scope="col">Total</th>
+          <th class="po-table__col-status" scope="col">Status</th>
+          <th
+            class="po-table__col-created"
+            scope="col"
+            [attr.aria-sort]="sorting() === 'createdAt desc' ? 'descending' : 'ascending'"
+          >
+            <button type="button" class="po-table__sort" (click)="toggleSort.emit()">
+              Created
+              <a-icon
+                [name]="sorting() === 'createdAt desc' ? 'sort-desc' : 'sort-asc'"
+                size="sm"
+              />
+            </button>
+          </th>
+          @if (!monitor()) {
+            <th class="po-table__col-actions" scope="col">Actions</th>
+          }
+        </tr>
+      </thead>
+      <tbody>
+        @if (loading()) {
+          @for (row of skeletonRows; track row) {
+            <tr class="po-table__row po-table__row--skeleton" aria-hidden="true">
+              @if (!monitor()) {
+                <td><span class="skeleton skeleton--square"></span></td>
+              }
+              <td><span class="skeleton skeleton--reference"></span></td>
+              <td><span class="skeleton skeleton--customer"></span></td>
+              <td class="po-table__cell-total"><span class="skeleton skeleton--total"></span></td>
+              <td class="po-table__cell-status"><span class="skeleton skeleton--status"></span></td>
+              <td class="po-table__cell-created"><span class="skeleton skeleton--date"></span></td>
+              @if (!monitor()) {
+                <td class="po-table__cell-actions">
+                  <span class="skeleton skeleton--actions"></span>
+                </td>
+              }
+            </tr>
+          }
+        } @else {
+          @for (order of items(); track order.id) {
+            <tr
+              class="po-table__row"
+              [class.po-table__row--expanded]="isExpanded(order.id)"
+              [class.po-row--highlighted]="highlightOf(order.id) !== null"
+              [class.po-row--tinted]="highlightOf(order.id) === 'statusChanged'"
+              [style.--po-row__tint]="tint(order)"
+              (animate.enter)="rowEntered($event, order.id)"
+              (animate.leave)="rowLeft($event, order.id)"
+            >
+              @if (!monitor()) {
+                <td>
+                  <button
+                    type="button"
+                    class="icon-button icon-button--sm"
+                    [attr.aria-expanded]="isExpanded(order.id)"
+                    [attr.aria-controls]="'po-lines-' + order.id"
+                    (click)="toggleRow.emit(order.id)"
+                  >
+                    <a-icon
+                      [name]="isExpanded(order.id) ? 'chevron-down' : 'chevron-right'"
+                      size="sm"
+                    />
+                    <span class="visually-hidden">Line items of {{ order.reference }}</span>
+                  </button>
+                </td>
+              }
+              <!-- Each cell's content sits in .po-table__cell so a Monitor Mode row can grow in and shrink out. -->
+              <td>
+                <div class="po-table__cell">
+                  <a-pill>{{ order.reference }}</a-pill>
+                </div>
+              </td>
+              <td class="po-table__cell-customer">
+                <div class="po-table__cell">{{ order.customer.name }}</div>
+              </td>
+              <td class="po-table__cell-total">
+                <div class="po-table__cell">{{ order.total | money: symbol(order) }}</div>
+              </td>
+              <td class="po-table__cell-status">
+                <div class="po-table__cell">
+                  <ng-container
+                    [ngTemplateOutlet]="statusTemplate() ?? defaultStatus"
+                    [ngTemplateOutletContext]="{ $implicit: order, size: 'sm' }"
+                  />
+                </div>
+              </td>
+              <td class="po-table__cell-created">
+                <div class="po-table__cell">{{ order.createdAt | date: 'd MMM y' }}</div>
+              </td>
+              @if (!monitor()) {
+                <td class="po-table__cell-actions">
+                  <a-action-menu
+                    [items]="rowActions()(order)"
+                    [label]="'Actions for ' + order.reference"
+                    (selected)="action.emit({ action: $event, order })"
+                  />
+                </td>
+              }
+            </tr>
+            @if (!monitor() && isExpanded(order.id)) {
+              <tr class="po-table__lines-row">
+                <td colspan="7" [id]="'po-lines-' + order.id">
+                  <adapt-line-items-panel
+                    [state]="lineItems()[order.id]"
+                    [symbol]="symbol(order)"
+                    [label]="'Line items of ' + order.reference"
+                    (loadMore)="loadMoreLines.emit({ id: order.id, skip: $event })"
+                  />
+                </td>
+              </tr>
+            }
+          }
+        }
+      </tbody>
+    </table>
+    @if (!loading()) {
+      <ng-container [ngTemplateOutlet]="emptyOrFailed" />
+    }
+  </div>
+} @else {
+  <div class="po-cards" [attr.aria-busy]="loading()">
+    @if (loading()) {
+      @for (row of skeletonRows.slice(0, 4); track row) {
+        <div class="po-card po-card--skeleton" aria-hidden="true">
+          <span class="skeleton skeleton--reference"></span>
+          <span class="skeleton skeleton--customer"></span>
+          <span class="skeleton skeleton--date"></span>
+        </div>
+      }
+    } @else {
+      @for (order of items(); track order.id) {
+        <article
+          class="po-card"
+          [class.po-row--highlighted]="highlightOf(order.id) !== null"
+          [class.po-row--tinted]="highlightOf(order.id) === 'statusChanged'"
+          [style.--po-row__tint]="tint(order)"
+          [attr.aria-label]="order.reference + ', ' + order.customer.name"
+          (animate.enter)="rowEntered($event, order.id)"
+          (animate.leave)="rowLeft($event, order.id)"
+        >
+          <div class="po-card__top">
+            <a-pill>{{ order.reference }}</a-pill>
+            @if (!monitor()) {
+              <a-action-menu
+                variant="kebab"
+                [items]="rowActions()(order)"
+                [label]="'Actions for ' + order.reference"
+                (selected)="action.emit({ action: $event, order })"
+              />
+            }
+          </div>
+          <p class="po-card__customer">{{ order.customer.name }}</p>
+          <div class="po-card__meta">
+            <span class="po-card__created">Created {{ order.createdAt | date: 'd MMM y' }}</span>
+            <span class="po-card__total">{{ order.total | money: symbol(order) }}</span>
+          </div>
+          <div class="po-card__bottom">
+            <ng-container
+              [ngTemplateOutlet]="statusTemplate() ?? defaultStatus"
+              [ngTemplateOutletContext]="{ $implicit: order, size: 'lg' }"
+            />
+            @if (!monitor()) {
+              <button
+                type="button"
+                class="po-card__toggle"
+                [attr.aria-expanded]="isExpanded(order.id)"
+                [attr.aria-controls]="'po-lines-' + order.id"
+                (click)="toggleRow.emit(order.id)"
+              >
+                <a-icon [name]="isExpanded(order.id) ? 'chevron-up' : 'chevron-down'" />{{
+                  lineCountLabel(order)
+                }}
+              </button>
+            }
+          </div>
+          @if (!monitor() && isExpanded(order.id)) {
+            <adapt-line-items-panel
+              [id]="'po-lines-' + order.id"
+              layout="card"
+              [state]="lineItems()[order.id]"
+              [symbol]="symbol(order)"
+              [label]="'Line items of ' + order.reference"
+              (loadMore)="loadMoreLines.emit({ id: order.id, skip: $event })"
+            />
+          }
+        </article>
+      }
+      <ng-container [ngTemplateOutlet]="emptyOrFailed" />
+    }
+  </div>
+}
+
+<ng-template #defaultStatus let-order>
+  <a-status-pill [status]="pill(order)" [label]="order.status.name" />
+</ng-template>
+
+<ng-template #emptyOrFailed>
+  @if (failed()) {
+    <div class="po-empty" role="alert">
+      <span class="po-empty__icon po-empty__icon--warning"
+        ><a-icon name="warning" size="lg"
+      /></span>
+      <p class="po-empty__title">Purchase orders could not be loaded</p>
+      <p class="po-empty__text">Check that Sharp ERP is running, then try again.</p>
+      <button type="button" class="button button--secondary button--sm" (click)="retry.emit()">
+        <a-icon name="loader" size="sm" />Try again
+      </button>
+    </div>
+  } @else if (items().length === 0) {
+    <div class="po-empty">
+      <span class="po-empty__icon"><a-icon name="search-x" size="lg" /></span>
+      @if (hasFilters()) {
+        <p class="po-empty__title">No purchase orders match your filters</p>
+        <p class="po-empty__text">Try a different reference, customer, status or date range.</p>
+        <button
+          type="button"
+          class="button button--secondary button--sm"
+          (click)="clearFilters.emit()"
+        >
+          <a-icon name="close" size="sm" />Clear filters
+        </button>
+      } @else {
+        <p class="po-empty__title">No purchase orders yet</p>
+        <p class="po-empty__text">Create the first one with New purchase order.</p>
+      }
+    </div>
+  }
+</ng-template>

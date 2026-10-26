@@ -1,0 +1,199 @@
+---
+name: coherence-review
+description: Ask whether the built system actually serves its objective — from a fresh context with no build memory. Use when a proof goes green and before the PR, at a capability boundary, or when a human asks whether the architecture still makes sense. This is NOT a code review against acceptance criteria — that is conformance-review.
+---
+
+Ask, from a **fresh context**, whether the built system serves the objective. This is the half of review
+that `conformance-review` deliberately does **not** cover.
+
+| | `conformance-review` | **this skill** |
+|---|---|---|
+| Asks | Does this code meet its AC and the standards? | **Does the built system serve the objective?** |
+| Context | In-session, full build memory | **Separate session, no build memory** |
+| Fires | Before each milestone merge | **When the proof goes green, before the PR** |
+
+> ## 🚫 Invocation rule — non-negotiable
+>
+> **Run this in a separate session with no build memory. NEVER spawn it as a subagent of the building
+> agent.** A subagent inherits the builder's framing, and that framing is the exact bias that lets a
+> *choice* get recorded as a *constraint*. If you are the agent that built the thing, you cannot perform
+> this review — say so and ask for a fresh session.
+
+## 0. Locate what you are reviewing — before reading anything else
+
+A fresh session starts on **whatever branch the checkout happens to be on**, which is usually not the one
+under review. Resolve the target from the prompt first; never assume the current branch when the prompt
+names something else.
+
+| The prompt gives | Resolve it like this |
+|---|---|
+| **A PR id** (`PR 612`, `!612`, a PR URL) | `repo_pull_request` action `get` (with `includeWorkItemRefs`). Take **only** `sourceRefName`, `targetRefName`, `status` and the linked work-item ids from the result. |
+| **An ADO work item id** (`AB#1106`, `#1106`, a work-item URL) | Read the item (`wit_work_item`, with relations). Its PR is the `ArtifactLink` relation whose URL is `vstfs:///Git/PullRequestId/…`; if there is none, list active PRs (`repo_pull_request` action `list`, `includeWorkItemRefs`) and match on the work-item id; if there is still none, look for a remote branch carrying the item's `Custom.PrimarySlug` (`git ls-remote --heads <remote> '*<slug>*'`). A Milestone resolves through its `Custom.MilestoneSlug`, but coherence review normally targets the **parent** Story/Spike's primary branch and its PR to `main`. |
+| **Neither** | Assume the **current branch** is the one to review, and look up an active PR whose `sourceRefName` is that branch. If the current branch is `main`, `qa` or `production`, there is nothing to review — stop and ask which work item or PR is meant. |
+
+The repository and project are the ones the `git remote` for Azure DevOps points at, cross-checked against
+[`azure-devops.md`](../../context/azure-devops.md).
+
+**Stop and ask a human — do not guess — when** an id was given but resolves to nothing, resolves to more
+than one active PR, or the PR is not `Active`. Do **not** fall back to the current branch when the prompt
+named a target; reviewing the wrong branch produces confident findings about the wrong code.
+
+**Get the code without changing anything:** `git fetch`, then read the diff as
+`git diff <remote>/<target>...<remote>/<source>`. To run the proof scripts, check the source branch out
+somewhere you will not commit — a detached `git switch --detach <remote>/<source>` on a clean tree, or a
+separate worktree. This review is **read-only**: no commits, no pushes, on any branch.
+
+> **Resolving the PR is not reading it.** A `get` returns the PR description along with the refs — do not
+> read it (see *Do not read* below). The same goes for the PR's existing comment threads until your own
+> findings are formed.
+
+## Inputs — and the ones you must be denied
+
+**Read only:**
+
+1. The **Epic's outcome** and the Feature's objective — what this is *for*.
+2. **The running system**: the proof scripts and their actual output.
+3. [`.agents/adrs/adr-index.md`](../../adrs/adr-index.md) — especially `Provisional` records.
+4. The **run-log and assumption-ledger deltas** since the last review.
+5. The **diff**.
+6. A fresh [`design-fidelity-check`](../design-fidelity-check/SKILL.md) **`verify`** run, done in this session
+   — never the builder's recorded result. It needs the spec's **citation table** only; read that table and
+   nothing else of the spec. Report its result line with your findings (`not applicable` with
+   its reason included). Drift is a blocking finding: the built surface no longer serves the approved design.
+
+**Do not read:** the spec's rationale, the builder's reasoning, or the PR description. **Those are what you
+must be able to contradict.** If you have already read them, you are the wrong session for this review.
+
+## The six questions — ask all of them, in these words
+
+### 1. Which stated constraint is actually a choice?
+
+For each constraint the design rests on: **what would have to be true for it to be genuinely forced, and
+has that been measured?**
+
+A design that states "X cannot be done" as though forced, when it actually follows from an **unmeasured**
+earlier choice, is a choice wearing a constraint's clothing — and a choice dressed that way cannot be
+argued with, so nobody argues with it.
+
+### 2. Which load-bearing claim is still `assumed`, and what now depends on it?
+
+An `assumed` claim may not constrain a design — it may only generate a Spike. Has one silently acquired
+dependents? `Accepted` + `assumed` is invalid and fails the gate; the honest status is `Provisional`.
+
+### 3. What did this capability foreclose?
+
+What is now **more expensive** than it was before? Which future option got quietly closed? Progress that
+closes doors is still progress, but only if the doors are named.
+
+### 4. Does the proof actually prove the claim — and can it fail?
+
+**A proof that cannot fail is not a proof.** Read the proof script. Construct the input that should break
+it. Would it? A test that passes because every meaningful dependency was stubbed away has verified the
+stubs.
+
+Check the instrument too: could it report success while measuring nothing?
+
+### 5. What would a fresh engineer reading only the code — not the docs — get wrong?
+
+The documentation is not deployed. If the code implies something different from the docs, **the code wins**
+and the docs are a liability.
+
+### 6. What is the cheapest measurement that would change our mind?
+
+Name it concretely: the command, the number, the threshold. If no measurement could change the conclusion,
+the conclusion is not empirical and should not be stated as if it were.
+
+## And always: what did the change leave behind?
+
+Ask this beside the six questions: **is any part of the system now orphaned, unreachable, or doing the
+same job twice?** Read the diff for code it replaced or stopped calling, and the running system for
+entry points nobody should reach any more: a route, a menu item, an endpoint, a component, a service.
+
+- Custom code with no remaining consumer is a finding. Search for consumers; do not take the diff's
+  word for it.
+- A replaced stock entry point that is still reachable and not blocked is a finding.
+- For a reworked item ([`rework`](../rework/SKILL.md)), read the rework spec's *Cleanup inventory*
+  table — the table only, as with the citation table above — and check each row against the code.
+- A deferral counts only if a human approved it and the follow-up item exists.
+
+Leftovers are blocking when they leave an entry point open or two implementations that will drift, and
+advisory otherwise.
+
+## Output
+
+Findings, each classified and each naming its target:
+
+- **Blocking** — the objective is not served, or a claim is false. Must be adjudicated before the PR merges.
+- **Advisory** — worth knowing, does not stop delivery.
+
+Every finding carries: **the file or claim**, **what is wrong**, and **the cheapest next probe** that would
+settle it.
+
+> **Findings go to a human, not to the builder for auto-fixing.** The human adjudicates: merge, revert,
+> spike, or re-scope. An agent that fixes its own coherence findings has closed the loop it was there to
+> open.
+
+Accepted findings become work items; unresolved assumptions become Spikes; rejected findings get a note on
+the item saying why.
+
+### Posting to the PR — when the reviewed branch has an active PR
+
+The PR is where the human adjudicates, so the findings go there, not only into the session transcript.
+Use `repo_pull_request_thread_write` action `create`, one call per thread.
+
+1. **One thread per finding that requires an action** — every **Blocking** finding, and every
+   **Advisory** finding that asks someone to do something (a probe, a work item, a doc fix). A purely
+   informational advisory goes in the summary only. Never batch two findings into one thread: each must
+   be adjudicable — and resolvable — on its own.
+2. **Each finding thread opens with a heading that names the severity and the problem:**
+
+   ```markdown
+   ## 🔴 Blocking — <the problem, in one line>
+   ```
+   ```markdown
+   ## 🟡 Advisory — <the problem, in one line>
+   ```
+
+   followed by the three things every finding carries — **Target** (file or claim), **What is wrong**,
+   and **Cheapest next probe** — and which of the six questions raised it. When the target is a file in
+   the diff, anchor the thread to it (`filePath`, and `rightFileStartLine`/`rightFileEndLine` where a
+   line applies); a claim with no single location goes on the PR as a general thread. Status `Active`.
+3. **Then one summary thread**, headed `## Coherence review — summary`: the reviewed branch and commit,
+   the counts by severity, a one-line list of each finding (heading text only), the purely informational
+   advisories, and whether the objective is served as built. Keep it short — the detail lives in the
+   finding threads. Status `Active`, like the finding threads — the human resolves it once they have
+   read the review as a whole.
+4. **No findings** still gets the summary thread, saying so — silence on a PR is indistinguishable from
+   the review not having run.
+5. **On a re-run**, after your findings are formed, list the PR's existing threads and skip any finding
+   already posted under the same heading and still `Active`; reply to it instead if something changed.
+
+**Never resolve, vote on or approve.** Posting is the whole of the agent's part: the threads stay `Active`
+for the human, per *Findings go to a human* above. No PR (the branch has none open yet) → report the
+findings in the session in the same heading format, and say that nothing was posted.
+
+## Scope
+
+**Normal cycle:** the delta plus the objective. **Periodically:** the whole system.
+
+## Calibration — and the trap in calibrating against a known answer
+
+A review calibrated against a finding the reviewer already half-knows (because it is stated almost
+verbatim in `adr-index.md` or `current-focus.md`) proves the finding is institutionalised, not that this
+skill can detect a **new** false constraint. Before trusting this skill's judgement on a repository, run it
+at least once with:
+
+1. **A redacted re-run** — withhold `adr-index.md`'s `Provisional` table and any context file section that
+   states a known contested constraint, keeping only the objective, the diff, and the ledger deltas. If the
+   same finding still surfaces, the questions are load-bearing.
+2. **A seeded claim** — plant an unmeasured load-bearing claim the reviewer has not been told about, and
+   see whether the review finds it. This is the only version that tests detection rather than recall.
+
+**A pass on the un-redacted version is evidence a finding is institutionalised. It is not evidence the
+skill can detect a new one.** Grade it as the former and say so.
+
+### The stronger signal, either way
+
+Whether or not a known answer surfaces, ask: **did the review produce findings the builder had not
+identified?** That is the skill doing analytical work, and it is harder to fake than reciting a known
+result.

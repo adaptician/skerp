@@ -1,0 +1,59 @@
+@if (options().length === 0) {
+  <a-status-pill [status]="pill()" [label]="order().status.name" />
+} @else {
+  <button
+    type="button"
+    class="status-control__trigger"
+    [class.status-control__trigger--lg]="size() === 'lg'"
+    [class.status-control__trigger--open]="open()"
+    aria-haspopup="true"
+    [attr.aria-expanded]="open()"
+    [attr.aria-controls]="panelId"
+    [attr.aria-label]="
+      'Status of ' + order().reference + ': ' + order().status.name + '. Change status'
+    "
+    [disabled]="busy()"
+    (click)="toggle()"
+  >
+    <a-status-pill [status]="pill()" [label]="order().status.name" />
+    @if (busy()) {
+      <a-icon name="loader" size="sm" class="status-control__spinner" />
+    } @else {
+      <a-icon [name]="open() ? 'chevron-up' : 'chevron-down'" size="sm" />
+    }
+  </button>
+  @if (open()) {
+    <div
+      class="status-control__panel"
+      role="group"
+      tabindex="-1"
+      [id]="panelId"
+      [attr.aria-label]="'Change the status of ' + order().reference"
+      (keydown)="onPanelKeydown($event)"
+      (focusout)="onPanelFocusout($event)"
+    >
+      @for (status of options(); track status.id) {
+        <div
+          class="status-control__option"
+          [class.status-control__option--current]="isCurrent(status)"
+        >
+          <button
+            #option
+            type="button"
+            class="status-control__choice"
+            [attr.aria-current]="isCurrent(status) ? 'true' : null"
+            (click)="choose(status)"
+          >
+            {{ status.name }}
+          </button>
+          @if (demoMode()) {
+            <a-info-tip [text]="note" [label]="'Why ' + status.name + ' is offered in Demo Mode'" />
+          }
+          @if (isCurrent(status)) {
+            <a-icon name="check" size="sm" class="status-control__check" />
+          }
+        </div>
+      }
+    </div>
+  }
+}

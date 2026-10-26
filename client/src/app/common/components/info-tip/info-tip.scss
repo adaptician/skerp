@@ -1,0 +1,55 @@
+@use 'typography' as *;
+@use 'mixins' as *;
+
+:host {
+  display: inline-flex;
+}
+
+.info-tip__button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--size-icon-sm);
+  height: var(--size-icon-sm);
+  padding: 0;
+  border: 0;
+  border-radius: var(--border-radius-pill);
+  background: var(--color-transparent);
+  color: var(--color-info);
+  cursor: help;
+
+  &:focus-visible {
+    @include focus-ring;
+  }
+}
+
+// Overlay/Tooltip: inverse surface, 8/12 padding, md radius, an 8px-tall arrow above the bubble.
+// Hidden with display: none (not removed) so aria-describedby always resolves.
+.info-tip__tooltip {
+  position: fixed;
+  z-index: 1100;
+  display: none;
+  margin-top: var(--spacing-2);
+  padding: var(--spacing-2) var(--spacing-3);
+  border-radius: var(--border-radius-md);
+  background: var(--color-surface-inverse);
+  color: var(--color-text-inverse);
+  text-align: left;
+  white-space: normal;
+  pointer-events: none;
+  @include caption-regular;
+}
+
+.info-tip__tooltip--visible {
+  display: block;
+}
+
+.info-tip__arrow {
+  position: absolute;
+  bottom: 100%;
+  width: 0;
+  height: 0;
+  border-right: var(--spacing-2) solid transparent;
+  border-bottom: var(--spacing-2) solid var(--color-surface-inverse);
+  border-left: var(--spacing-2) solid transparent;
+}

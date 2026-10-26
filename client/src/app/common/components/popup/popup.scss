@@ -1,0 +1,74 @@
+@use 'breakpoints' as *;
+@use 'typography' as *;
+
+// Layer 3 — popup tokens (Feedback/ErrorPopup, InfoPopup, SuccessPopup).
+:host {
+  --popup__background: var(--color-surface-raised);
+  --popup__accent: var(--color-danger);
+  --popup__title: var(--color-text-strong);
+  --popup__text: var(--color-text);
+  --popup__shadow: var(--elevation-dropdown);
+
+  display: flex;
+  align-items: flex-start;
+  gap: var(--spacing-3);
+  width: 100%;
+  padding: var(--spacing-3) var(--spacing-4);
+  border-left: 4px solid var(--popup__accent);
+  border-radius: var(--border-radius-md);
+  background: var(--popup__background);
+  box-shadow: var(--popup__shadow);
+}
+
+:host(.popup--info) {
+  --popup__accent: var(--color-info);
+}
+
+:host(.popup--success) {
+  --popup__accent: var(--color-success);
+}
+
+.popup__icon {
+  margin-top: 0;
+  color: var(--popup__accent);
+}
+
+.popup__content {
+  display: flex;
+  flex: 1 1 0;
+  flex-direction: column;
+  gap: var(--spacing-1);
+  min-width: 0;
+  overflow-wrap: break-word;
+}
+
+.popup__title {
+  @include body-sm-strong;
+  color: var(--popup__title);
+}
+
+.popup__description {
+  @include body-sm;
+  color: var(--popup__text);
+}
+
+// Mobile: a 44px touch target with a 20px icon; desktop: 32px with a 16px icon.
+.popup__dismiss {
+  width: var(--size-control-lg);
+  height: var(--size-control-lg);
+  margin: calc(-1 * var(--spacing-3)) calc(-1 * var(--spacing-2)) 0 0;
+  color: var(--color-icon-strong);
+
+  @media (min-width: $breakpoint-md) {
+    width: var(--size-control-sm);
+    height: var(--size-control-sm);
+    margin: 0;
+  }
+}
+
+.popup__dismiss-icon {
+  @media (min-width: $breakpoint-md) {
+    width: var(--size-icon-sm);
+    height: var(--size-icon-sm);
+  }
+}

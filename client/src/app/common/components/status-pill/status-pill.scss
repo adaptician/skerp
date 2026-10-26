@@ -1,0 +1,42 @@
+@use 'typography' as *;
+
+:host {
+  display: inline-flex;
+  flex-shrink: 0;
+  gap: var(--spacing-1);
+  align-items: center;
+  padding: var(--spacing-1) var(--spacing-2);
+  border-radius: var(--border-radius-pill);
+  background: var(--status-pill__background);
+  color: var(--status-pill__text);
+  white-space: nowrap;
+  @include caption-strong;
+}
+
+:host(.status-pill--pending) {
+  --status-pill__background: var(--color-status-pending-background);
+  --status-pill__text: var(--color-status-pending-text);
+}
+
+:host(.status-pill--confirmed) {
+  --status-pill__background: var(--color-status-confirmed-background);
+  --status-pill__text: var(--color-status-confirmed-text);
+}
+
+:host(.status-pill--fulfilled) {
+  --status-pill__background: var(--color-status-fulfilled-background);
+  --status-pill__text: var(--color-status-fulfilled-text);
+}
+
+:host(.status-pill--cancelled) {
+  --status-pill__background: var(--color-status-cancelled-background);
+  --status-pill__text: var(--color-status-cancelled-text);
+}
+
+// The 6px status dot, drawn in the pill's text colour.
+.status-pill__dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+}

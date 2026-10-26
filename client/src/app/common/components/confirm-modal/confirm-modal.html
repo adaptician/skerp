@@ -1,0 +1,35 @@
+<div class="confirm__scrim">
+  <div
+    #dialog
+    class="confirm"
+    role="alertdialog"
+    aria-modal="true"
+    [attr.aria-labelledby]="id + '-title'"
+    [attr.aria-describedby]="id + '-message'"
+    tabindex="-1"
+  >
+    <span class="confirm__handle" aria-hidden="true"></span>
+    <span class="confirm__disc" aria-hidden="true"><a-icon [name]="icon()" /></span>
+    <h2 class="confirm__title" [id]="id + '-title'">{{ title() }}</h2>
+    <p class="confirm__message" [id]="id + '-message'">{{ message() }}</p>
+    <div class="confirm__buttons">
+      <button
+        #cancelButton
+        type="button"
+        class="button button--secondary button--md confirm__cancel"
+        [disabled]="busy()"
+        (click)="cancel()"
+      >
+        Cancel
+      </button>
+      <button
+        type="button"
+        class="button button--danger button--md confirm__confirm"
+        [disabled]="busy()"
+        (click)="confirm()"
+      >
+        <a-icon [name]="busy() ? 'loader' : icon()" size="sm" />{{ confirmLabel() }}
+      </button>
+    </div>
+  </div>
+</div>

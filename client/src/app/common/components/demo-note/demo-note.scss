@@ -1,0 +1,26 @@
+@use 'typography' as *;
+
+:host {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-1);
+  padding: var(--spacing-3) var(--spacing-4);
+  border-left: var(--border-width-focus-ring) solid var(--color-info);
+  border-radius: var(--border-radius-md);
+  background: var(--color-info-muted);
+}
+
+.demo-note__eyebrow {
+  display: flex;
+  gap: var(--spacing-1);
+  align-items: center;
+  margin: 0;
+  color: var(--color-info);
+  @include caption-overline;
+}
+
+.demo-note__text {
+  margin: 0;
+  color: var(--color-text);
+  @include caption-regular;
+}

@@ -1,0 +1,119 @@
+---
+name: conformance-review
+description: Review code against its acceptance criteria, the standards and the Definition of Done — run the quality gate, read the diff as a reviewer, classify findings blocking or advisory, and surface rather than hide them. Use before every milestone merge and before raising a PR. Architecture and design are deliberately out of scope; that is coherence-review.
+---
+
+Review the **code** against its acceptance criteria, the standards and the Definition of Done. Run this
+before every milestone merge and before raising a PR.
+
+> ## ⚠ Scope — read this before starting
+>
+> **Architecture and design are OUT of scope for this skill.** That is
+> [`coherence-review`](../coherence-review/SKILL.md), which runs in a **separate session with no build
+> memory**.
+>
+> | | **this skill** | `coherence-review` |
+> |---|---|---|
+> | Asks | **Does this code meet its AC and the standards?** | Does the built system serve the objective? |
+> | Context | In-session, full build memory | Separate session, no build memory |
+> | Fires | **Before each milestone merge** | When the proof goes green, before the PR |
+>
+> **Neither review may assume the other did the work.** A review that reads code implemented according to
+> acceptance criteria but never checks the system against its objective misses exactly the failure this
+> two-way split exists to catch. This skill replaces an earlier, unscoped `self-review` — a name that
+> claimed everything and hid what it omitted.
+
+## 1. Run the gate
+
+`node .agents/scripts/verify.mjs` — the **full** gate, not `--fast`. Fix every failure before reviewing
+further; a red gate is an automatic fail.
+
+**Read the skips.** A skip is never a pass. If a skip says something other than a plain "not applicable",
+it is telling you about a gap.
+
+## 2. Read the diff as a reviewer, not the author
+
+Read the actual diff against the base branch. Ask *"does this behave correctly, and can I demonstrate
+it?"* — not *"is this what I meant to write?"* **Authorial intent is not evidence. The code is.**
+
+## 3. Walk the categories
+
+Work through the five in [`agent-workflow.md`](../../standards/agent-workflow.md) → *What a Review Checks*:
+**Security, Correctness, Standards compliance, Test coverage, Documentation & completeness.** Read the
+standard for the detail; do not restate it here, so this skill cannot drift from its source.
+
+For **Standards compliance**, check only the standards whose `applies-when` trigger matches the touched
+files ([`standards/README.md`](../../standards/README.md)). Before relying on a rule being enforced, check
+its `enforced-by`: **`prose-only` means nothing checks it.**
+
+For **Test coverage**, the question is not a percentage. Ask: **can this test fail?** Construct the input
+that should break it. A test passing because its dependencies were stubbed away has verified the stubs.
+
+For every finding record three things: **file and line**, **what is wrong**, and **blocking** or
+**advisory**.
+
+## 4. Check the acceptance criteria one at a time
+
+Each AC, individually: **is it satisfied, and how did you confirm it?** Exercised in a running environment,
+with no manual intervention behind the scenes — no scripts, no queries.
+
+**A result from a developer machine is a different fact from a result verified in a shared/staging
+environment**; do not report the first as the second. If a later-stage verification has not run, say so.
+
+## 5. Check design fidelity
+
+Run [`design-fidelity-check`](../design-fidelity-check/SKILL.md) in **`verify`** mode and record its result
+line with the findings — `not applicable` with its reason included. If `run-milestone` already ran it in
+this session on the same commit, cite that result instead of re-running. **Drift, an unapproved frame, or a
+design the build has no citation for is a blocking finding.** So is any level of the verification bar
+([`design.md`](../../standards/design.md) → *Verifying an Implementation Against Its Design*) that `verify`
+reports as `fail` or `unverified`. A level-3 `unverified` (no screenshot tool) is reported with the human
+sign-off step it added to How To Test. If that step is missing, that is a further blocking finding. The
+item is not reported as verified until a human has signed off.
+
+## 6. Check functional impact
+
+Read the plan's *Functional impact* section: the spec, or the ADO Description below 5 points. Then read
+the diff for shared mechanisms ([`plan-work-item`](../plan-work-item/SKILL.md) §7 lists the kinds). Each
+of these is **blocking**:
+
+- the plan has no *Functional impact* section, or leaves it blank instead of saying **None**;
+- the diff changes a shared mechanism that the section does not list;
+- a consumer of a changed shared mechanism has no re-check recorded in the run log;
+- a re-check that shows a break, or a possible break, was not escalated
+  ([`run-milestone`](../run-milestone/SKILL.md) §5).
+
+## 7. Check the cleanup
+
+Ask: **is anything this change made unused still in the tree?** Read the diff for code it replaced or
+stopped calling: components, routes, menu entries, endpoints, services, styles, tests and
+configuration. Search for each one's remaining consumers. Each of these is **blocking**:
+
+- custom code left orphaned by the change, with no consumers and no recorded reason to keep it;
+- a stock framework entry point the change replaced that is still reachable and not blocked;
+- for a reworked item ([`rework`](../rework/SKILL.md)), any row of the rework spec's *Cleanup
+  inventory* that is unresolved, or resolved differently from its recorded decision.
+
+A cleanup deferred to another work item is not blocking only when a human approved the deferral and
+the follow-up item exists. Otherwise, the cleanup belongs in this work item.
+
+## 8. Resolve or surface
+
+- Fix blocking findings, then **re-run the gate** — a fix can introduce a new failure.
+- **Pause for a human** if a finding needs authority you do not have: editing a path in
+  [`owned-by-humans.md`](../../owned-by-humans.md), departing from an Accepted ADR, or changing scope.
+- A defect found in **already-completed** work becomes a new **Bug** (urgent) or **Issue** (deferrable) —
+  never a reopening, and never a silent fix.
+
+## 9. Confirm the Definition of Done
+
+Walk the code-level Definition of Done in
+[`agent-workflow.md`](../../standards/agent-workflow.md) → *What "Done" Looks Like at the Code Level*, plus
+the completion checklist in `AGENTS.md` → *Before completing any task*. Confirm each or state why it does
+not apply.
+
+Remember a User Story or Spike is a **step**: it is not required to satisfy the Feature's overall DoD
+individually. The **Feature** must satisfy it as a whole. Say which you are asserting.
+
+**Report every finding honestly, including advisory ones.** A review reports what it found; it does not
+quietly fix or hide it. And it does not approve — an AI agent may never approve a PR.

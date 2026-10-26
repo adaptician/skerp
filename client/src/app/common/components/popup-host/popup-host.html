@@ -1,0 +1,8 @@
+@for (notification of notifications.notifications(); track notification.id) {
+  <a-popup
+    [kind]="notification.kind"
+    [title]="notification.title"
+    [description]="notification.description"
+    (dismissed)="notifications.dismiss(notification.id)"
+  />
+}

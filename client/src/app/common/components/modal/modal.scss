@@ -1,0 +1,120 @@
+@use 'breakpoints' as *;
+@use 'typography' as *;
+
+// Overlay/Modal: full-screen sheet below lg, an 800px dialog at most 90vh tall from lg up.
+:host {
+  --modal__background: var(--color-surface-raised);
+  --modal__divider: var(--color-border);
+  --modal__title: var(--color-text-strong);
+  --modal__scrim: var(--color-overlay);
+}
+
+// Overlay/Scrim. Below the popup host (z-index 1000), so a failure message stays on top.
+.modal__scrim {
+  position: fixed;
+  z-index: 900;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--modal__scrim);
+}
+
+.modal {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  outline: none;
+  background: var(--modal__background);
+  color: var(--color-text);
+
+  @media (min-width: $breakpoint-lg) {
+    width: 800px;
+    height: auto;
+    max-height: 90vh;
+    border-radius: var(--border-radius-xl);
+    box-shadow: var(--elevation-modal);
+  }
+}
+
+.modal__header {
+  display: flex;
+  flex-shrink: 0;
+  gap: var(--spacing-3);
+  align-items: center;
+  padding: var(--spacing-5) var(--spacing-6);
+  border-bottom: var(--border-width-default) solid var(--modal__divider);
+
+  @media (max-width: ($breakpoint-lg - 1px)) {
+    padding: var(--spacing-3) var(--spacing-4);
+  }
+}
+
+.modal__title {
+  flex: 1 1 auto;
+  margin: 0;
+  color: var(--modal__title);
+  @include heading-h3;
+
+  @media (max-width: ($breakpoint-lg - 1px)) {
+    @include heading-h4;
+  }
+}
+
+.modal__body {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  gap: var(--spacing-5);
+  padding: var(--spacing-6);
+  overflow-y: auto;
+
+  @media (max-width: ($breakpoint-lg - 1px)) {
+    gap: var(--spacing-4);
+    padding: var(--spacing-4);
+  }
+}
+
+.modal__footer {
+  display: flex;
+  flex-shrink: 0;
+  flex-direction: column;
+  gap: var(--spacing-3);
+  padding: var(--spacing-4) var(--spacing-6);
+  border-top: var(--border-width-default) solid var(--modal__divider);
+
+  @media (max-width: ($breakpoint-lg - 1px)) {
+    padding: var(--spacing-4);
+  }
+}
+
+// Overlay/Sheet: anchored to the bottom, at most 90vh, rounded top, with a drag handle.
+.modal__scrim--sheet {
+  align-items: flex-end;
+}
+
+.modal--sheet {
+  height: auto;
+  max-height: 90vh;
+  border-radius: var(--border-radius-xl) var(--border-radius-xl) 0 0;
+  box-shadow: var(--elevation-modal);
+
+  @media (min-width: $breakpoint-lg) {
+    width: 100%;
+    border-radius: var(--border-radius-xl) var(--border-radius-xl) 0 0;
+  }
+
+  .modal__header {
+    border-bottom: 0;
+  }
+}
+
+.modal__handle {
+  align-self: center;
+  width: 40px;
+  height: 4px;
+  margin-top: var(--spacing-3);
+  border-radius: var(--border-radius-pill);
+  background: var(--color-border);
+}

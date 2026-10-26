@@ -1,0 +1,45 @@
+@use 'breakpoints' as *;
+@use 'typography' as *;
+
+// Brand/Lockup: 40px emblem + Heading/H3 wordmark; scaled to 80% below md (the mobile header).
+:host {
+  display: inline-flex;
+  align-items: center;
+  gap: 9.6px;
+
+  @media (min-width: $breakpoint-md) {
+    gap: var(--spacing-3);
+  }
+}
+
+.brand-lockup__emblem {
+  width: 32px;
+  height: 32px;
+
+  @media (min-width: $breakpoint-md) {
+    width: 40px;
+    height: 40px;
+  }
+}
+
+.brand-lockup__wordmark {
+  display: inline-flex;
+  gap: 3.2px;
+  @include heading-h3;
+  font-size: 19.2px;
+  line-height: 25.6px;
+  white-space: nowrap;
+
+  @media (min-width: $breakpoint-md) {
+    gap: var(--spacing-1);
+    @include heading-h3;
+  }
+}
+
+.brand-lockup__sharp {
+  color: var(--color-text-strong);
+}
+
+.brand-lockup__erp {
+  color: var(--color-primary);
+}

@@ -1,0 +1,49 @@
+@use 'typography' as *;
+
+// Menu/Typeahead: a raised panel with dropdown elevation; the active option is tinted.
+:host {
+  --typeahead-menu__background: var(--color-surface-raised);
+  --typeahead-menu__border: var(--color-border);
+  --typeahead-menu__option--active: var(--color-surface-hover);
+
+  position: absolute;
+  top: calc(100% + var(--spacing-1));
+  right: 0;
+  left: 0;
+  z-index: 1;
+}
+
+.typeahead-menu {
+  max-height: 264px;
+  margin: 0;
+  padding: var(--spacing-1);
+  overflow-y: auto;
+  border: var(--border-width-default) solid var(--typeahead-menu__border);
+  border-radius: var(--border-radius-md);
+  background: var(--typeahead-menu__background);
+  box-shadow: var(--elevation-dropdown);
+  list-style: none;
+}
+
+.typeahead-menu__option {
+  display: flex;
+  flex-direction: column;
+  padding: var(--spacing-2) var(--spacing-3);
+  border-radius: var(--border-radius-sm);
+  cursor: pointer;
+
+  &:hover,
+  &.typeahead-menu__option--active {
+    background: var(--typeahead-menu__option--active);
+  }
+}
+
+.typeahead-menu__primary {
+  color: var(--color-text-strong);
+  @include body-sm;
+}
+
+.typeahead-menu__secondary {
+  color: var(--color-text-muted);
+  @include caption-regular;
+}

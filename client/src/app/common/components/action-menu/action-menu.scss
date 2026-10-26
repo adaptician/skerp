@@ -1,0 +1,98 @@
+@use 'typography' as *;
+@use 'mixins' as *;
+
+:host {
+  position: relative;
+  display: inline-flex;
+}
+
+// Button/Actions: a 32px outline trigger (96px wide) in the table; a 44px kebab on cards.
+.action-menu__trigger {
+  display: inline-flex;
+  gap: var(--spacing-1);
+  align-items: center;
+  justify-content: center;
+  width: 96px;
+  height: var(--size-control-sm);
+  padding: 0 var(--spacing-3);
+  border: var(--border-width-default) solid var(--color-border);
+  border-radius: var(--border-radius-md);
+  background: var(--color-transparent);
+  color: var(--color-text);
+  cursor: pointer;
+  @include body-sm-strong;
+
+  &:hover {
+    background: var(--color-surface-hover);
+  }
+
+  &:focus-visible,
+  &.action-menu__trigger--open {
+    @include focus-ring;
+  }
+}
+
+.action-menu__trigger--kebab {
+  width: var(--size-control-lg);
+  height: var(--size-control-lg);
+  padding: 0;
+  color: var(--color-icon);
+}
+
+// Menu/Actions: raised panel with dropdown elevation, aligned to the trigger's right edge.
+.action-menu__menu {
+  position: absolute;
+  top: calc(100% + var(--spacing-1));
+  right: 0;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  min-width: 148px;
+  padding: var(--spacing-1);
+  border: var(--border-width-default) solid var(--color-border);
+  border-radius: var(--border-radius-md);
+  background: var(--color-surface-raised);
+  box-shadow: var(--elevation-dropdown);
+}
+
+.action-menu__item {
+  display: flex;
+  gap: var(--spacing-2);
+  align-items: center;
+  min-height: var(--size-control-md);
+  padding: 0 var(--spacing-3);
+  border: 0;
+  border-radius: var(--border-radius-sm);
+  background: var(--color-transparent);
+  color: var(--color-text);
+  text-align: left;
+  white-space: nowrap;
+  cursor: pointer;
+  @include body-sm;
+
+  &:hover,
+  &:focus-visible {
+    outline: none;
+    background: var(--color-surface-hover);
+  }
+}
+
+.action-menu__item--danger {
+  color: var(--color-danger);
+}
+
+// An action the row does not allow now (actions-open-locked): muted, not selectable.
+.action-menu__item[aria-disabled='true'] {
+  color: var(--color-text-disabled);
+  cursor: not-allowed;
+
+  &:hover {
+    background: var(--color-transparent);
+  }
+}
+
+.action-menu__divider {
+  height: var(--border-width-default);
+  margin: var(--spacing-1) 0;
+  background: var(--color-border);
+}

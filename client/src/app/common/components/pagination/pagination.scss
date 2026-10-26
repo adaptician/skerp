@@ -1,0 +1,69 @@
+@use 'typography' as *;
+@use 'mixins' as *;
+
+.pagination {
+  display: flex;
+  gap: var(--spacing-2);
+  align-items: center;
+  min-height: 48px;
+}
+
+.pagination__summary {
+  flex: 1 1 auto;
+  margin: 0;
+  color: var(--color-text-muted);
+  @include body-sm;
+}
+
+.pagination__compact-summary {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  align-items: center;
+  margin: 0;
+}
+
+.pagination__page {
+  color: var(--color-text);
+  @include body-sm-strong;
+}
+
+.pagination__range {
+  color: var(--color-text-muted);
+  @include caption-regular;
+}
+
+.pagination__gap {
+  color: var(--color-text-muted);
+  @include body-sm;
+}
+
+// Navigation/PageButton: 40px, primary fill when current.
+.pagination__page-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--size-control-md);
+  height: var(--size-control-md);
+  padding: 0;
+  border: 0;
+  border-radius: var(--border-radius-md);
+  background: var(--color-transparent);
+  color: var(--color-text);
+  cursor: pointer;
+  @include body-sm;
+
+  &:hover:not(.pagination__page-button--current) {
+    background: var(--color-surface-hover);
+  }
+
+  &:focus-visible {
+    @include focus-ring;
+  }
+}
+
+.pagination__page-button--current {
+  background: var(--color-primary);
+  color: var(--color-text-on-primary);
+  @include body-sm-strong;
+}

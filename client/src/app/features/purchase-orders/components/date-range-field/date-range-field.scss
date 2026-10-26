@@ -1,0 +1,69 @@
+@use 'typography' as *;
+@use 'mixins' as *;
+
+:host {
+  display: block;
+  min-width: 0;
+}
+
+.date-range {
+  position: relative;
+}
+
+.date-range__trigger {
+  justify-content: space-between;
+  width: 100%;
+  cursor: pointer;
+  font: inherit;
+  text-align: left;
+  @include body-sm;
+
+  &:focus-visible,
+  &.date-range__trigger--open {
+    @include focus-ring;
+  }
+}
+
+.date-range__placeholder {
+  color: var(--color-text-placeholder);
+}
+
+.date-range__panel {
+  position: absolute;
+  top: calc(100% + var(--spacing-1));
+  right: 0;
+  z-index: 20;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-3);
+  width: 296px;
+  padding: var(--spacing-3);
+  border: var(--border-width-default) solid var(--color-border);
+  border-radius: var(--border-radius-md);
+  background: var(--color-surface-raised);
+  box-shadow: var(--elevation-dropdown);
+}
+
+.date-range__inputs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--spacing-3);
+}
+
+.date-range__input {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-1);
+  min-width: 0;
+}
+
+.date-range__input-label {
+  color: var(--color-text-muted);
+  @include caption-strong;
+}
+
+.date-range__actions {
+  display: flex;
+  gap: var(--spacing-2);
+  justify-content: flex-end;
+}

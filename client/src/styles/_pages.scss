@@ -1,0 +1,58 @@
+@use 'breakpoints' as *;
+@use 'mixins' as *;
+
+// Site-wide layout structure (styling.md → File Organisation).
+
+:root {
+  // The sticky header's height: bar padding plus the 44px toggle, plus its border. The popup host
+  // places itself below it.
+  --shell-header-height: 61px;
+
+  @media (min-width: $breakpoint-md) {
+    --shell-header-height: 77px;
+  }
+}
+
+// Background/Page: the full-bleed backdrop, fixed and covering. A placeholder until the
+// 2560 × 1440 PNG is supplied; replace public/backgrounds/page-*.svg (or point these at the PNG).
+body {
+  background: var(--color-backdrop-base) url('/backgrounds/page-mobile.svg') center / cover
+    no-repeat fixed;
+
+  @media (min-width: $breakpoint-md) {
+    background-image: url('/backgrounds/page-desktop.svg');
+  }
+}
+
+.shell__main {
+  display: flex;
+  justify-content: center;
+  padding: var(--spacing-6) var(--spacing-4);
+
+  // The md and lg list frames keep 32px sides; the 1400px desktop frames use 64px.
+  @media (min-width: $breakpoint-md) {
+    padding: var(--spacing-12) var(--spacing-8);
+  }
+
+  @media (min-width: $breakpoint-xl) {
+    padding: var(--spacing-12) var(--spacing-16);
+  }
+}
+
+// The single centred column the welcome and placeholder screens use (760px at desktop).
+.page-column {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-5);
+  width: 100%;
+  max-width: 760px;
+  min-width: 0;
+
+  @media (min-width: $breakpoint-md) {
+    gap: var(--spacing-6);
+  }
+}
+
+.visually-hidden {
+  @include visually-hidden;
+}

@@ -1,0 +1,9 @@
+<header class="card__heading">
+  @if (eyebrow()) {
+    <p class="card__eyebrow">{{ eyebrow() }}</p>
+  }
+  <h2 class="card__title">{{ title() }}</h2>
+</header>
+<div class="card__body">
+  <ng-content />
+</div>

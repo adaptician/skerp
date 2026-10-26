@@ -1,0 +1,87 @@
+@use 'breakpoints' as *;
+@use 'typography' as *;
+@use 'mixins' as *;
+
+// Filter Bar (desktop and lg): surface card, 20/16 padding, 16px gaps; fields wrap at lg.
+.filter-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-4);
+  align-items: flex-end;
+  padding: var(--spacing-4) var(--spacing-5);
+  border: var(--border-width-default) solid var(--color-border);
+  border-radius: var(--border-radius-lg);
+  background: var(--color-surface);
+}
+
+.filter-bar__reference,
+.filter-bar__created {
+  width: 256px;
+}
+
+.filter-bar__customers {
+  width: 280px;
+}
+
+.filter-bar__status {
+  width: 200px;
+}
+
+.filter-bar__select {
+  padding-right: var(--spacing-2);
+}
+
+// Button/Ghost LG: no resting fill; disabled text when nothing is set.
+.filter-bar__clear {
+  display: inline-flex;
+  gap: var(--spacing-2);
+  align-items: center;
+  justify-content: center;
+  min-height: var(--size-control-lg);
+  padding: 0 var(--spacing-5);
+  border: 0;
+  border-radius: var(--border-radius-md);
+  background: var(--color-transparent);
+  color: var(--color-text);
+  cursor: pointer;
+  @include body-md-strong;
+
+  &:hover:not(:disabled) {
+    background: var(--color-surface-hover);
+  }
+
+  &:focus-visible {
+    @include focus-ring;
+  }
+
+  &:disabled {
+    color: var(--color-text-disabled);
+    cursor: default;
+  }
+}
+
+// Toolbar (< lg): search fills, Filters button at 44px.
+.filter-toolbar {
+  display: flex;
+  gap: var(--spacing-3);
+  align-items: center;
+}
+
+.filter-toolbar__search {
+  flex: 1 1 auto;
+}
+
+.filter-toolbar__button {
+  flex-shrink: 0;
+}
+
+// Overlay/Sheet: a bottom sheet with its footer actions side by side.
+.filter-sheet__footer {
+  display: flex;
+  gap: var(--spacing-3);
+}
+
+.filter-sheet__clear,
+.filter-sheet__show {
+  flex: 1 1 0;
+}

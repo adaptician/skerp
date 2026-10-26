@@ -1,0 +1,171 @@
+@use 'typography' as *;
+@use 'mixins' as *;
+
+:host {
+  display: block;
+  min-width: 0;
+}
+
+.customer-select {
+  position: relative;
+}
+
+.customer-select__control {
+  padding-right: 0;
+}
+
+.customer-select__control--open {
+  @include focus-ring;
+}
+
+.customer-select__pills {
+  display: flex;
+  gap: var(--spacing-1);
+  align-items: center;
+  min-width: 0;
+  overflow: hidden;
+}
+
+// The trigger fills the rest of the control, so a click anywhere but a pill opens the panel.
+.customer-select__trigger {
+  display: flex;
+  flex: 1 1 auto;
+  gap: var(--spacing-2);
+  align-items: center;
+  justify-content: space-between;
+  align-self: stretch;
+  min-width: 0;
+  padding: 0 var(--spacing-3) 0 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+
+  &:focus-visible {
+    outline: none;
+  }
+
+  .field__icon {
+    margin-left: auto;
+  }
+}
+
+.customer-select__placeholder {
+  color: var(--color-text-placeholder);
+}
+
+// Menu/SelectPanel.
+.customer-select__panel {
+  position: absolute;
+  top: calc(100% + var(--spacing-1));
+  left: 0;
+  z-index: 20;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-1);
+  width: 320px;
+  max-width: calc(100vw - 2 * var(--spacing-4));
+  padding: var(--spacing-1);
+  border: var(--border-width-default) solid var(--color-border);
+  border-radius: var(--border-radius-md);
+  background: var(--color-surface-raised);
+  box-shadow: var(--elevation-dropdown);
+}
+
+.customer-select__panel--inline {
+  position: static;
+  width: auto;
+  max-width: none;
+  margin-top: var(--spacing-4);
+}
+
+.customer-select__search {
+  padding: var(--spacing-2);
+}
+
+.customer-select__options {
+  max-height: 264px;
+  margin: 0;
+  padding: 0;
+  overflow-y: auto;
+  list-style: none;
+}
+
+// Menu/Option with Control/Checkbox: 44px rows; selected rows are tinted and semibold.
+.customer-select__option {
+  position: relative;
+  display: flex;
+  gap: var(--spacing-3);
+  align-items: center;
+  min-height: var(--size-control-lg);
+  padding: 0 var(--spacing-3);
+  border-radius: var(--border-radius-sm);
+  color: var(--color-text);
+  cursor: pointer;
+  @include body-sm;
+
+  &:hover {
+    background: var(--color-surface-hover);
+  }
+
+  &:focus-within {
+    @include focus-ring;
+  }
+}
+
+.customer-select__option--selected {
+  background: var(--color-surface-selected);
+  @include body-sm-strong;
+
+  &:hover {
+    background: var(--color-surface-selected);
+  }
+}
+
+.customer-select__option--disabled {
+  color: var(--color-text-disabled);
+  cursor: not-allowed;
+}
+
+.customer-select__checkbox {
+  @include visually-hidden;
+}
+
+.customer-select__box {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: var(--size-icon-md);
+  height: var(--size-icon-md);
+  border: var(--border-width-default) solid var(--color-border-strong);
+  border-radius: var(--border-radius-sm);
+  background: var(--color-surface-raised);
+  color: var(--color-text-on-primary);
+
+  .customer-select__option--selected & {
+    border-color: var(--color-primary);
+    background: var(--color-primary);
+  }
+}
+
+.customer-select__empty {
+  display: flex;
+  gap: var(--spacing-1);
+  align-items: center;
+  padding: var(--spacing-3);
+  color: var(--color-text-muted);
+  @include body-sm;
+}
+
+.customer-select__hint {
+  display: flex;
+  gap: var(--spacing-1);
+  align-items: center;
+  margin: 0;
+  padding: var(--spacing-2) var(--spacing-3);
+  border-top: var(--border-width-default) solid var(--color-border);
+  color: var(--color-text-muted);
+  @include caption-regular;
+}

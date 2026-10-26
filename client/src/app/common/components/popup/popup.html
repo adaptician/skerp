@@ -1,0 +1,11 @@
+<a-icon class="popup__icon" [name]="icon()" size="md" />
+<div class="popup__content">
+  <p class="popup__title">{{ title() }}</p>
+  <p class="popup__description">{{ description() }}</p>
+</div>
+@if (dismissible()) {
+  <button type="button" class="icon-button popup__dismiss" (click)="dismissed.emit()">
+    <a-icon name="close" class="popup__dismiss-icon" />
+    <span class="visually-hidden">Dismiss message</span>
+  </button>
+}

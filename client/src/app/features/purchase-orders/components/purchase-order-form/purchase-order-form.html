@@ -1,0 +1,498 @@
+<a-modal
+  [title]="editing() ? 'Edit purchase order' : 'New purchase order'"
+  [closeLabel]="editing() ? 'Close edit purchase order' : 'Close new purchase order'"
+  [busy]="saving()"
+  (closed)="cancel()"
+>
+  <form id="purchase-order-form" class="po-form" [formGroup]="form" (ngSubmit)="save()" novalidate>
+    <fieldset class="po-form__fieldset" [disabled]="saving()">
+      @if (order(); as current) {
+        <!-- Reference and customer never change on an edit (brief). -->
+        <div class="po-form__row">
+          <div class="field">
+            <span class="field__label" id="po-reference-label">Reference number</span>
+            <div
+              class="field__control field__control--readonly"
+              role="group"
+              aria-labelledby="po-reference-label"
+              aria-describedby="po-reference-locked"
+            >
+              <a-pill>{{ current.reference }}</a-pill>
+              <a-icon class="field__icon" name="lock" size="sm" label="Locked" />
+            </div>
+            <p class="field__helper" id="po-reference-locked">
+              Set when the order was created and cannot be changed.
+            </p>
+          </div>
+
+          <div class="field">
+            <span class="field__label" id="po-customer-label">Customer</span>
+            <div
+              class="field__control field__control--readonly"
+              role="group"
+              aria-labelledby="po-customer-label"
+              aria-describedby="po-customer-locked"
+            >
+              <span class="po-form__locked-value">{{ current.customer.name }}</span>
+              <a-icon class="field__icon" name="lock" size="sm" label="Locked" />
+            </div>
+            <p class="field__helper" id="po-customer-locked">
+              {{ current.customer.email }} · customer cannot be changed
+            </p>
+          </div>
+        </div>
+      } @else {
+        <!-- Reference number -->
+        <div class="field">
+          <label class="field__label" for="po-reference">
+            Reference number <span class="field__required" aria-hidden="true">*</span>
+          </label>
+          <div class="field__control" [class.field__control--error]="referenceError() !== null">
+            <input
+              id="po-reference"
+              class="field__input"
+              formControlName="reference"
+              placeholder="e.g. PO-2026-025"
+              autocomplete="off"
+              required
+              [attr.aria-invalid]="referenceError() !== null"
+              aria-describedby="po-reference-message"
+              (input)="onReferenceInput()"
+              (blur)="checkReference()"
+            />
+            @switch (referenceState()) {
+              @case ('checking') {
+                <a-icon
+                  class="po-form__indicator po-form__indicator--loading"
+                  name="loader"
+                  label="Checking the reference"
+                />
+              }
+              @case ('available') {
+                <a-icon
+                  class="po-form__indicator po-form__indicator--available"
+                  name="success"
+                  label="Reference available"
+                />
+              }
+              @case ('exists') {
+                <a-icon
+                  class="po-form__indicator po-form__indicator--exists"
+                  name="stop-sign"
+                  label="Reference already exists"
+                />
+              }
+            }
+          </div>
+          <div id="po-reference-message" aria-live="polite">
+            @if (referenceError(); as message) {
+              <p class="field__error"><a-icon name="error" size="sm" />{{ message }}</p>
+            } @else if (referenceState() === 'available') {
+              <p class="field__helper">{{ referenceMessage() }}</p>
+            }
+          </div>
+        </div>
+
+        <!-- Customer -->
+        <div class="po-form__row">
+          <div class="field">
+            <label class="field__label" for="po-customer-name">
+              Customer name <span class="field__required" aria-hidden="true">*</span>
+            </label>
+            <div class="po-form__combobox">
+              <div
+                class="field__control"
+                [class.field__control--error]="customerNameError() !== null"
+              >
+                @if (selectedCustomer(); as customer) {
+                  <a-pill-removable
+                    [label]="customer.name"
+                    [removeLabel]="'Remove ' + customer.name"
+                    [disabled]="saving()"
+                    (removed)="removeCustomer()"
+                  />
+                } @else {
+                  <input
+                    id="po-customer-name"
+                    class="field__input"
+                    formControlName="customerName"
+                    placeholder="Start typing a customer name"
+                    autocomplete="off"
+                    role="combobox"
+                    aria-autocomplete="list"
+                    aria-controls="po-customer-options"
+                    [attr.aria-expanded]="customerMenuOpen()"
+                    [attr.aria-activedescendant]="
+                      customerActiveIndex() >= 0
+                        ? 'po-customer-options-' + customerActiveIndex()
+                        : null
+                    "
+                    [attr.aria-invalid]="customerNameError() !== null"
+                    aria-describedby="po-customer-name-message"
+                    (input)="onCustomerInput()"
+                    (keydown)="onCustomerKeydown($event)"
+                    (blur)="onCustomerBlur()"
+                  />
+                }
+              </div>
+              @if (customerMenuOpen()) {
+                <a-typeahead-menu
+                  listId="po-customer-options"
+                  label="Matching customers"
+                  [options]="customerMenuOptions()"
+                  [activeIndex]="customerActiveIndex()"
+                  (selected)="selectCustomerOption($event)"
+                />
+              }
+            </div>
+            <div id="po-customer-name-message">
+              @if (customerNameError(); as message) {
+                <p class="field__error"><a-icon name="error" size="sm" />{{ message }}</p>
+              } @else if (selectedCustomer()) {
+                <p class="field__helper">Existing customer. Remove the pill to choose another.</p>
+              } @else if (customerConfirmedNew()) {
+                <p class="field__helper">New customer — add their email below.</p>
+              }
+            </div>
+          </div>
+
+          <div class="field">
+            <label
+              class="field__label"
+              for="po-customer-email"
+              [class.field__label--disabled]="selectedCustomer() !== null"
+            >
+              Customer email <span class="field__required" aria-hidden="true">*</span>
+            </label>
+            <div
+              class="field__control"
+              [class.field__control--disabled]="selectedCustomer() !== null"
+              [class.field__control--error]="customerEmailError() !== null"
+            >
+              <input
+                id="po-customer-email"
+                class="field__input"
+                type="email"
+                formControlName="customerEmail"
+                placeholder="name@company.co.za"
+                autocomplete="off"
+                [attr.aria-invalid]="customerEmailError() !== null"
+                aria-describedby="po-customer-email-message"
+              />
+            </div>
+            <div id="po-customer-email-message">
+              @if (customerEmailError(); as message) {
+                <p class="field__error"><a-icon name="error" size="sm" />{{ message }}</p>
+              } @else if (selectedCustomer(); as customer) {
+                <p class="field__helper field__helper--disabled">
+                  Email on file for {{ customer.name }}.
+                </p>
+              }
+            </div>
+          </div>
+        </div>
+      }
+
+      <!-- Status and currency -->
+      <div class="po-form__row">
+        <div class="field">
+          <span class="field__label" id="po-status-label">Status</span>
+          <div
+            class="field__control field__control--readonly"
+            aria-labelledby="po-status-label"
+            role="group"
+          >
+            @if (order(); as current) {
+              <a-status-pill [status]="orderPill()" [label]="current.status.name" />
+            } @else {
+              <a-status-pill status="pending" label="Pending" />
+            }
+            <a-icon class="field__icon" name="lock" size="sm" label="Locked" />
+          </div>
+          <p class="field__helper">
+            {{
+              editing()
+                ? 'Change the status from the purchase-order list.'
+                : 'Every new purchase order starts as Pending.'
+            }}
+          </p>
+        </div>
+
+        <div class="field">
+          <label class="field__label" for="po-currency">Currency</label>
+          <div class="field__control">
+            <select id="po-currency" class="field__input" formControlName="currencyId">
+              @for (currency of currencies; track currency.id) {
+                <option [ngValue]="currency.id">{{ currency.label }}</option>
+              }
+            </select>
+            <a-icon class="field__icon" name="chevron-down" />
+          </div>
+        </div>
+      </div>
+
+      <!-- Line items -->
+      <section class="po-form__lines" aria-labelledby="po-lines-heading">
+        <div class="po-form__lines-heading">
+          <h3 id="po-lines-heading" class="po-form__lines-title">Line items</h3>
+          <span class="po-form__lines-count">{{ lineCount() }} of {{ maxLineItems }}</span>
+        </div>
+
+        <div class="po-form__line-header" aria-hidden="true">
+          <span class="po-form__col-sku">SKU</span>
+          <span class="po-form__col-name">Product name</span>
+          <span class="po-form__col-qty">Qty</span>
+          <span class="po-form__col-price">Price</span>
+          <span class="po-form__col-total">Sub-total</span>
+          <span class="po-form__col-remove"></span>
+        </div>
+
+        <div formArrayName="lineItems" class="po-form__line-list">
+          @for (line of lineItems.controls; track line.controls.key.value; let i = $index) {
+            <div
+              class="po-form__line"
+              [formGroupName]="i"
+              role="group"
+              [attr.aria-label]="'Line ' + (i + 1)"
+            >
+              <div class="po-form__line-fields">
+                <div class="field po-form__col-sku">
+                  <label class="field__label po-form__line-label" [for]="'po-line-sku-' + i"
+                    >SKU</label
+                  >
+                  <div class="po-form__combobox">
+                    <div
+                      class="field__control"
+                      [class.field__control--disabled]="line.controls.productId.value !== null"
+                      [class.field__control--error]="fieldInvalid(line, 'sku')"
+                    >
+                      <a-icon class="field__icon" name="search" />
+                      <input
+                        class="field__input"
+                        [id]="'po-line-sku-' + i"
+                        formControlName="sku"
+                        placeholder="Search SKU"
+                        autocomplete="off"
+                        role="combobox"
+                        aria-autocomplete="list"
+                        [attr.aria-label]="'SKU, line ' + (i + 1)"
+                        [attr.aria-controls]="'po-sku-options-' + i"
+                        [attr.aria-expanded]="
+                          skuSearchKey() === line.controls.key.value && skuOptions().length > 0
+                        "
+                        [attr.aria-activedescendant]="
+                          skuSearchKey() === line.controls.key.value && skuActiveIndex() >= 0
+                            ? 'po-sku-options-' + i + '-' + skuActiveIndex()
+                            : null
+                        "
+                        [attr.aria-invalid]="fieldInvalid(line, 'sku')"
+                        (input)="onSkuInput(line)"
+                        (keydown)="onSkuKeydown($event, line)"
+                        (blur)="closeSkuMenu()"
+                      />
+                    </div>
+                    @if (skuSearchKey() === line.controls.key.value && skuOptions().length > 0) {
+                      <a-typeahead-menu
+                        class="po-form__sku-menu"
+                        [listId]="'po-sku-options-' + i"
+                        label="Matching products"
+                        [options]="skuMenuOptions()"
+                        [activeIndex]="skuActiveIndex()"
+                        (selected)="selectProductOption(line, $event)"
+                      />
+                    }
+                  </div>
+                </div>
+
+                <div class="field po-form__col-name">
+                  <label class="field__label po-form__line-label" [for]="'po-line-name-' + i"
+                    >Product name</label
+                  >
+                  <div
+                    class="field__control"
+                    [class.field__control--disabled]="line.controls.productId.value !== null"
+                    [class.field__control--error]="fieldInvalid(line, 'name')"
+                  >
+                    <input
+                      class="field__input"
+                      [id]="'po-line-name-' + i"
+                      formControlName="name"
+                      placeholder="Product name"
+                      autocomplete="off"
+                      [attr.aria-label]="'Product name, line ' + (i + 1)"
+                      [attr.aria-invalid]="fieldInvalid(line, 'name')"
+                    />
+                  </div>
+                </div>
+
+                <div class="po-form__amounts">
+                  <div class="field po-form__col-qty">
+                    <label class="field__label po-form__line-label" [for]="'po-line-qty-' + i"
+                      >Qty</label
+                    >
+                    <div
+                      class="field__control"
+                      [class.field__control--error]="fieldInvalid(line, 'quantity')"
+                    >
+                      <input
+                        class="field__input field__input--numeric"
+                        [id]="'po-line-qty-' + i"
+                        type="number"
+                        inputmode="numeric"
+                        min="1"
+                        max="1000"
+                        step="1"
+                        placeholder="0"
+                        formControlName="quantity"
+                        [attr.aria-label]="'Quantity, line ' + (i + 1)"
+                        [attr.aria-invalid]="fieldInvalid(line, 'quantity')"
+                        (blur)="onAmountBlur(line)"
+                      />
+                    </div>
+                  </div>
+
+                  <div class="field po-form__col-price">
+                    <label class="field__label po-form__line-label" [for]="'po-line-price-' + i"
+                      >Price</label
+                    >
+                    <div
+                      class="field__control"
+                      [class.field__control--error]="fieldInvalid(line, 'price')"
+                    >
+                      <span class="field__prefix" aria-hidden="true">{{ symbol() }}</span>
+                      <input
+                        class="field__input field__input--numeric"
+                        [id]="'po-line-price-' + i"
+                        type="number"
+                        inputmode="decimal"
+                        min="0.01"
+                        step="0.01"
+                        placeholder="0.00"
+                        formControlName="price"
+                        [attr.aria-label]="'Price, line ' + (i + 1)"
+                        [attr.aria-invalid]="fieldInvalid(line, 'price')"
+                        (blur)="onAmountBlur(line)"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                <div class="po-form__subtotal-row">
+                  <div
+                    class="po-form__total po-form__col-total"
+                    [attr.aria-label]="'Sub-total, line ' + (i + 1)"
+                  >
+                    <span class="po-form__total-label">Sub-total</span>
+                    @if (isCalculating(line)) {
+                      <span class="po-form__calculating"
+                        ><a-icon name="loader" size="sm" />calculating…</span
+                      >
+                    } @else {
+                      <output class="po-form__total-value">{{
+                        lineTotal(line) | money: symbol()
+                      }}</output>
+                    }
+                  </div>
+                  <button
+                    type="button"
+                    class="icon-button icon-button--md po-form__col-remove"
+                    [disabled]="lineCount() <= 1"
+                    (click)="removeLine(i)"
+                  >
+                    <a-icon name="trash" />
+                    <span class="visually-hidden">Remove line {{ i + 1 }}</span>
+                  </button>
+                </div>
+              </div>
+
+              @if (lineErrors(line); as errors) {
+                @if (errors.length > 0) {
+                  <ul class="po-form__line-errors">
+                    @for (error of errors; track error) {
+                      <li class="field__error"><a-icon name="error" size="sm" />{{ error }}</li>
+                    }
+                  </ul>
+                }
+              }
+            </div>
+          }
+        </div>
+
+        <div class="po-form__add">
+          <button
+            type="button"
+            class="button button--secondary button--sm"
+            [disabled]="lineCount() >= maxLineItems"
+            (click)="addLine()"
+          >
+            <a-icon name="plus" size="sm" />Add line item
+          </button>
+          <span class="field__helper">An order holds 1 to {{ maxLineItems }} line items.</span>
+        </div>
+      </section>
+
+      <div class="po-form__grand-total-row">
+        <div class="po-form__total po-form__total--grand">
+          <span class="po-form__total-label">Grand total</span>
+          @if (calculating()) {
+            <span class="po-form__calculating"><a-icon name="loader" size="sm" />calculating…</span>
+          } @else {
+            <output class="po-form__total-value" aria-live="polite">{{
+              grandTotal() | money: symbol()
+            }}</output>
+          }
+        </div>
+      </div>
+
+      <div class="field">
+        <label class="field__label" for="po-notes">Notes</label>
+        <div
+          class="field__control field__control--multiline"
+          [class.field__control--error]="notesError() !== null"
+        >
+          <textarea
+            id="po-notes"
+            class="field__input"
+            formControlName="notes"
+            placeholder="Optional notes for this order"
+            rows="3"
+          ></textarea>
+        </div>
+        @if (notesError(); as message) {
+          <p class="field__error"><a-icon name="error" size="sm" />{{ message }}</p>
+        }
+      </div>
+    </fieldset>
+  </form>
+
+  <div modalFooter class="po-form__footer">
+    <div class="po-form__buttons">
+      <button
+        type="button"
+        class="button button--secondary button--md po-form__button"
+        [disabled]="saving()"
+        (click)="cancel()"
+      >
+        Cancel
+      </button>
+      <button
+        type="submit"
+        form="purchase-order-form"
+        class="button button--primary button--md po-form__button"
+        [class.button--danger]="saveWarns()"
+        [class.button--danger-ring]="saveWarns()"
+        [disabled]="saveDisabled()"
+      >
+        @if (saving()) {
+          <a-icon name="loader" size="sm" />
+        } @else if (saveWarns()) {
+          <a-icon name="warning" size="sm" />
+        }
+        {{ editing() ? 'Save changes' : 'Save' }}
+      </button>
+    </div>
+    @if (demoMode() && !editing()) {
+      <a-demo-note>{{ demoSaveNote }}</a-demo-note>
+    }
+  </div>
+</a-modal>

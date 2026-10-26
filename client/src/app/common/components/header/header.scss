@@ -1,0 +1,138 @@
+@use 'breakpoints' as *;
+@use 'typography' as *;
+@use 'mixins' as *;
+
+// Layer 3 — Navigation/Header and Navigation/MenuItem tokens.
+:host {
+  --header__background: var(--color-surface-raised);
+  --header__border: var(--color-border);
+  --menu-item__background--hover: var(--color-surface-hover);
+  --menu-item__background--active: var(--color-surface-selected);
+  --menu-item__text: var(--color-text);
+  --menu-item__text--active: var(--color-text-link);
+
+  position: sticky;
+  z-index: 100;
+  top: 0;
+  display: block;
+  background: var(--header__background);
+}
+
+.header__bar {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+  padding: var(--spacing-2) var(--spacing-4);
+  border-bottom: var(--border-width-default) solid var(--header__border);
+  background: var(--header__background);
+
+  @media (min-width: $breakpoint-md) {
+    gap: var(--spacing-8);
+    padding: var(--spacing-4) var(--spacing-16);
+  }
+}
+
+.header__home {
+  display: inline-flex;
+  flex-shrink: 0;
+  border-radius: var(--border-radius-md);
+  text-decoration: none;
+
+  &:focus-visible {
+    @include focus-ring;
+  }
+}
+
+// The desktop menu appears from md; below it the menu button takes over.
+.header__menu {
+  display: none;
+
+  @media (min-width: $breakpoint-md) {
+    display: block;
+  }
+}
+
+.header__menu-list {
+  display: flex;
+  gap: var(--spacing-1);
+}
+
+.header__spacer {
+  flex: 1 1 0;
+}
+
+.header__menu-button {
+  color: var(--color-icon-strong);
+
+  @media (min-width: $breakpoint-md) {
+    display: none;
+  }
+}
+
+// The panel drops over the page below the bar instead of pushing it down.
+.header__panel {
+  position: absolute;
+  z-index: 2;
+  top: 100%;
+  right: 0;
+  left: 0;
+  padding: var(--spacing-3) var(--spacing-4);
+  border-bottom: var(--border-width-default) solid var(--header__border);
+  background: var(--header__background);
+  box-shadow: var(--elevation-dropdown);
+
+  @media (min-width: $breakpoint-md) {
+    display: none;
+  }
+}
+
+.header__panel-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-1);
+}
+
+.header__scrim {
+  position: fixed;
+  z-index: 1;
+  inset: 0;
+  background: var(--color-overlay);
+
+  @media (min-width: $breakpoint-md) {
+    display: none;
+  }
+}
+
+.menu-item {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-2);
+  height: var(--size-control-md);
+  padding: 0 var(--spacing-3);
+  border-radius: var(--border-radius-md);
+  color: var(--menu-item__text);
+  text-decoration: none;
+  white-space: nowrap;
+  @include body-sm-strong;
+
+  &:hover {
+    background: var(--menu-item__background--hover);
+  }
+
+  &:focus-visible {
+    @include focus-ring;
+  }
+}
+
+.menu-item--row {
+  display: flex;
+  height: var(--size-control-lg);
+}
+
+.menu-item--active,
+.menu-item--active:hover {
+  background: var(--menu-item__background--active);
+  color: var(--menu-item__text--active);
+}

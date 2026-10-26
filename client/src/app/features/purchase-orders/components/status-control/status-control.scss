@@ -1,0 +1,136 @@
+@use 'typography' as *;
+@use 'mixins' as *;
+
+:host {
+  position: relative;
+  display: inline-flex;
+}
+
+// Field/StatusSelect: the status pill and a chevron in an outline control, 120px wide;
+// SM (32px) in the table, LG (44px) on cards. Open: 2px focus border plus the focus ring.
+.status-control__trigger {
+  display: inline-flex;
+  gap: var(--spacing-1);
+  align-items: center;
+  justify-content: space-between;
+  min-width: 120px;
+  height: var(--size-control-sm);
+  padding: 0 var(--spacing-2);
+  border: var(--border-width-default) solid var(--color-border-strong);
+  border-radius: var(--border-radius-md);
+  background: var(--color-surface-raised);
+  color: var(--color-icon);
+  cursor: pointer;
+
+  &:hover:not(:disabled) {
+    background: var(--color-surface-hover);
+  }
+
+  &:focus-visible {
+    @include focus-ring;
+  }
+
+  &:disabled {
+    cursor: progress;
+  }
+}
+
+.status-control__trigger--lg {
+  height: var(--size-control-lg);
+  padding: 0 var(--spacing-3);
+}
+
+.status-control__trigger--open {
+  border: var(--border-width-emphasis) solid var(--color-border-focus);
+  @include focus-ring;
+}
+
+.status-control__spinner {
+  animation: status-control-spin 1s linear infinite;
+}
+
+@keyframes status-control-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+// Menu/SelectPanel: 232px raised panel under the trigger, left-aligned, 4px inset.
+.status-control__panel {
+  position: absolute;
+  top: calc(100% + var(--spacing-1));
+  left: 0;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  width: 232px;
+  padding: var(--spacing-1);
+  border: var(--border-width-default) solid var(--color-border);
+  border-radius: var(--border-radius-md);
+  background: var(--color-surface-raised);
+  box-shadow: var(--elevation-dropdown);
+}
+
+// Menu/Option: 44px rows; the whole row is the choice, the info icon and check sit on the right.
+.status-control__option {
+  position: relative;
+  display: flex;
+  gap: var(--spacing-3);
+  align-items: center;
+  min-height: var(--size-control-lg);
+  padding: 0 var(--spacing-3);
+  border-radius: var(--border-radius-sm);
+
+  &:hover,
+  &:focus-within {
+    background: var(--color-surface-hover);
+  }
+}
+
+.status-control__option--current,
+.status-control__option--current:hover,
+.status-control__option--current:focus-within {
+  background: var(--color-surface-selected);
+}
+
+.status-control__choice {
+  flex: 1;
+  align-self: stretch;
+  padding: 0;
+  border: 0;
+  background: var(--color-transparent);
+  color: var(--color-text);
+  text-align: left;
+  cursor: pointer;
+  @include body-sm;
+
+  // The row shows focus (hover tint plus an inset ring); the button's own outline would cut it.
+  &:focus-visible {
+    outline: none;
+  }
+
+  // The whole row is the click target.
+  &::after {
+    position: absolute;
+    inset: 0;
+    content: '';
+  }
+}
+
+.status-control__option:has(.status-control__choice:focus-visible) {
+  box-shadow: inset 0 0 0 var(--border-width-emphasis) var(--color-border-focus);
+}
+
+.status-control__option--current .status-control__choice {
+  @include body-sm-strong;
+}
+
+// The info button sits above the row-wide click target (later in the DOM, so no z-index: one
+// would make a stacking context and trap the tooltip under the next row's icon).
+.status-control__option a-info-tip {
+  position: relative;
+}
+
+.status-control__check {
+  color: var(--color-primary);
+}

@@ -1,0 +1,5 @@
+# Project tool versions for asdf / mise / proto.
+# See .agents/standards/tooling.md for policy.
+# .NET SDK is pinned via global.json (the authoritative source for .NET).
+
+nodejs 24.19.0

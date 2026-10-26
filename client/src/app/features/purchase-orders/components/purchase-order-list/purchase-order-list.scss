@@ -1,0 +1,446 @@
+@use 'typography' as *;
+@use 'mixins' as *;
+
+// ── Table (≥ lg): Table/HeaderRow and Table/Row ──
+// Column widths (Table/HeaderRow): expand 40 · reference 140 · customer fill · total 140 (right) ·
+// status 180 · created 128 · actions 112. The rounded corners come from the header and the last
+// row, so the actions menu is never clipped.
+
+.po-table {
+  border: var(--border-width-default) solid var(--color-border);
+  border-radius: var(--border-radius-lg);
+  background: var(--color-surface);
+}
+
+.po-table__table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  table-layout: fixed;
+}
+
+.po-table__header th {
+  height: 48px;
+  padding: 0;
+  border-bottom: var(--border-width-default) solid var(--color-border);
+  background: var(--color-surface-sunken);
+  color: var(--color-text-muted);
+  text-align: left;
+  @include caption-strong;
+
+  &:first-child {
+    padding-left: var(--spacing-3);
+    border-top-left-radius: var(--border-radius-lg);
+  }
+
+  &:last-child {
+    padding-right: var(--spacing-3);
+    border-top-right-radius: var(--border-radius-lg);
+  }
+}
+
+.po-table__col-expand {
+  width: calc(40px + var(--spacing-3));
+}
+
+.po-table__col-reference {
+  width: 140px;
+}
+
+.po-table__col-total {
+  width: 140px;
+
+  // The header label sits at the start of a 120px box aligned to the column's end.
+  .po-table__header & {
+    padding-left: var(--spacing-5);
+  }
+}
+
+.po-table__col-status {
+  width: 180px;
+
+  .po-table__header & {
+    padding-left: var(--spacing-3);
+  }
+}
+
+.po-table__col-created {
+  width: 128px;
+}
+
+.po-table__col-actions {
+  width: calc(112px + var(--spacing-3));
+
+  .po-table__header & {
+    text-align: right;
+  }
+}
+
+.po-table__sort {
+  display: inline-flex;
+  gap: var(--spacing-1);
+  align-items: center;
+  height: var(--size-control-md);
+  padding: 0 var(--spacing-3);
+  border: 0;
+  border-radius: var(--border-radius-sm);
+  background: var(--color-transparent);
+  color: var(--color-text);
+  cursor: pointer;
+  @include caption-strong;
+
+  a-icon {
+    color: var(--color-primary);
+  }
+
+  &:focus-visible {
+    @include focus-ring;
+  }
+}
+
+.po-table__row td {
+  height: 56px;
+  padding: var(--spacing-2) 0;
+  border-bottom: var(--border-width-default) solid var(--color-border);
+  color: var(--color-text);
+  vertical-align: middle;
+  @include body-sm;
+
+  &:first-child {
+    padding-left: var(--spacing-3);
+  }
+
+  &:last-child {
+    padding-right: var(--spacing-3);
+  }
+}
+
+.po-table__row--expanded td {
+  border-bottom: 0;
+}
+
+.po-table__lines-row td {
+  padding: 0;
+  border-bottom: var(--border-width-default) solid var(--color-border);
+}
+
+// The last row's bottom edge is the table's: no double border, rounded corners.
+tbody tr:last-child td {
+  border-bottom: 0;
+
+  &:first-child {
+    border-bottom-left-radius: var(--border-radius-lg);
+  }
+
+  &:last-child {
+    border-bottom-right-radius: var(--border-radius-lg);
+  }
+}
+
+.po-table__cell-customer .po-table__cell {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.po-table__row .po-table__cell-total {
+  color: var(--color-text-strong);
+  text-align: right;
+  white-space: nowrap;
+  @include numeric-md;
+}
+
+.po-table__row .po-table__cell-status,
+.po-table__row .po-table__cell-created {
+  padding-left: var(--spacing-3);
+  white-space: nowrap;
+}
+
+.po-table__row .po-table__cell-actions {
+  text-align: right;
+}
+
+// A cell's content box: block-level, so a Monitor Mode row can animate its height (see below).
+.po-table__cell {
+  display: block;
+}
+
+// ── Cards (< lg): Table/Row, Breakpoint=Mobile ──
+
+.po-cards {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-3);
+}
+
+.po-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-3);
+  padding: var(--spacing-4);
+  border: var(--border-width-default) solid var(--color-border);
+  border-radius: var(--border-radius-lg);
+  background: var(--color-surface);
+}
+
+.po-card__top,
+.po-card__meta,
+.po-card__bottom {
+  display: flex;
+  gap: var(--spacing-2);
+  align-items: center;
+  justify-content: space-between;
+  min-width: 0;
+}
+
+.po-card__customer {
+  margin: 0;
+  color: var(--color-text-strong);
+  @include body-md-strong;
+}
+
+.po-card__created {
+  color: var(--color-text-muted);
+  @include caption-regular;
+}
+
+.po-card__total {
+  color: var(--color-text-strong);
+  white-space: nowrap;
+  @include numeric-md;
+}
+
+// Button/Ghost LG: the line-items toggle.
+.po-card__toggle {
+  display: inline-flex;
+  gap: var(--spacing-2);
+  align-items: center;
+  min-height: var(--size-control-lg);
+  padding: 0 var(--spacing-5);
+  border: 0;
+  border-radius: var(--border-radius-md);
+  background: var(--color-transparent);
+  color: var(--color-text);
+  cursor: pointer;
+  @include body-md-strong;
+
+  &:hover {
+    background: var(--color-surface-hover);
+  }
+
+  &:focus-visible {
+    @include focus-ring;
+  }
+}
+
+// ── Loading skeleton (Purchase Orders / Loading) ──
+
+.skeleton {
+  display: block;
+  height: 10px;
+  border-radius: var(--border-radius-pill);
+  background: var(--color-skeleton);
+}
+
+.skeleton--square {
+  width: 12px;
+  margin-left: var(--spacing-2);
+}
+
+.skeleton--reference {
+  width: 68px;
+}
+
+.skeleton--customer {
+  width: 128px;
+}
+
+.skeleton--total {
+  width: 58px;
+  margin-left: auto;
+}
+
+.skeleton--status {
+  width: 64px;
+}
+
+.skeleton--date {
+  width: 60px;
+}
+
+.skeleton--actions {
+  width: 52px;
+  margin-left: auto;
+}
+
+.po-table__row--skeleton td {
+  height: 40px;
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+.po-card--skeleton {
+  min-height: 140px;
+}
+
+// ── Empty and failed (Purchase Orders / Empty) ──
+
+.po-empty {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-2);
+  align-items: center;
+  padding: var(--spacing-8) var(--spacing-4) var(--spacing-10);
+  text-align: center;
+
+  .po-cards & {
+    border: var(--border-width-default) solid var(--color-border);
+    border-radius: var(--border-radius-lg);
+    background: var(--color-surface);
+  }
+}
+
+.po-empty__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 52px;
+  height: 52px;
+  margin-bottom: var(--spacing-2);
+  border-radius: 50%;
+  background: var(--color-surface-hover);
+  color: var(--color-text-muted);
+}
+
+.po-empty__icon--warning {
+  background: var(--color-warning-muted);
+  color: var(--color-warning);
+}
+
+.po-empty__title {
+  margin: 0;
+  color: var(--color-text-strong);
+  @include heading-h4;
+}
+
+.po-empty__text {
+  margin: 0 0 var(--spacing-2);
+  color: var(--color-text-muted);
+  @include body-sm;
+}
+
+// ── Monitor Mode: pushed changes (Feature AB#1482) ──
+// A highlighted row is outlined in the primary colour and lifted with the dropdown elevation for as
+// long as the store holds the highlight (2 s); a status change also takes the new status's pill
+// background. Arriving rows grow from nothing, pushing their neighbours apart; leaving rows do the
+// reverse and fade. Rows animate their cells' padding and content height, since a table row cannot
+// animate its own height.
+
+$po-row-motion: 300ms;
+
+.po-table__row,
+.po-card {
+  transition:
+    box-shadow $po-row-motion ease,
+    background-color $po-row-motion ease,
+    outline-color $po-row-motion ease,
+    transform $po-row-motion ease;
+  outline: var(--border-width-focus-ring) solid var(--color-transparent);
+  outline-offset: calc(-1 * var(--border-width-focus-ring));
+}
+
+.po-row--highlighted {
+  position: relative;
+  z-index: 1;
+  outline-color: var(--color-primary);
+  box-shadow: var(--elevation-dropdown);
+  transform: translateY(-2px);
+}
+
+.po-row--tinted {
+  background-color: var(--po-row__tint);
+}
+
+.po-row--entering td {
+  animation: po-row-cell-grow $po-row-motion ease-out;
+}
+
+.po-row--entering .po-table__cell {
+  overflow: hidden;
+  animation: po-row-content-grow $po-row-motion ease-out;
+}
+
+.po-row--leaving td {
+  animation: po-row-cell-grow $po-row-motion ease-in reverse forwards;
+}
+
+.po-row--leaving .po-table__cell {
+  overflow: hidden;
+  animation: po-row-content-grow $po-row-motion ease-in reverse forwards;
+}
+
+.po-card.po-row--entering {
+  overflow: hidden;
+  animation: po-card-grow $po-row-motion ease-out;
+}
+
+.po-card.po-row--leaving {
+  overflow: hidden;
+  animation: po-card-grow $po-row-motion ease-in reverse forwards;
+}
+
+@keyframes po-row-cell-grow {
+  from {
+    height: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+}
+
+@keyframes po-row-content-grow {
+  from {
+    max-height: 0;
+    opacity: 0;
+  }
+
+  to {
+    max-height: var(--size-control-lg);
+    opacity: 1;
+  }
+}
+
+@keyframes po-card-grow {
+  from {
+    max-height: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    border-width: 0;
+    opacity: 0;
+  }
+
+  to {
+    max-height: 240px;
+    opacity: 1;
+  }
+}
+
+// Reduced motion: rows appear and go at once, and a highlight shows without the lift.
+@media (prefers-reduced-motion: reduce) {
+  .po-table__row,
+  .po-card {
+    transition: none;
+  }
+
+  .po-row--highlighted {
+    transform: none;
+  }
+
+  .po-row--entering td,
+  .po-row--entering .po-table__cell,
+  .po-row--leaving td,
+  .po-row--leaving .po-table__cell,
+  .po-card.po-row--entering,
+  .po-card.po-row--leaving {
+    animation: none;
+  }
+}

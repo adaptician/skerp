@@ -1,0 +1,34 @@
+<div class="modal__scrim" [class.modal__scrim--sheet]="variant() === 'sheet'">
+  <div
+    #dialog
+    class="modal"
+    [class.modal--sheet]="variant() === 'sheet'"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="modal-title"
+    tabindex="-1"
+    (keydown)="onKeydown($event)"
+  >
+    @if (variant() === 'sheet') {
+      <span class="modal__handle" aria-hidden="true"></span>
+    }
+    <header class="modal__header">
+      <h2 id="modal-title" class="modal__title">{{ title() }}</h2>
+      <button
+        type="button"
+        class="icon-button icon-button--md modal__close"
+        [disabled]="busy()"
+        (click)="requestClose()"
+      >
+        <a-icon name="close" />
+        <span class="visually-hidden">{{ closeLabel() }}</span>
+      </button>
+    </header>
+    <div class="modal__body">
+      <ng-content />
+    </div>
+    <footer class="modal__footer">
+      <ng-content select="[modalFooter]" />
+    </footer>
+  </div>
+</div>

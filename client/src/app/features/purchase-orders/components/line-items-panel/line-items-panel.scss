@@ -1,0 +1,149 @@
+@use 'typography' as *;
+@use 'mixins' as *;
+
+// Table/LineItems: sunken; the desktop sub-table is indented under the row (64px left, 24px right).
+:host {
+  display: block;
+  background: var(--color-surface-sunken);
+  padding: var(--spacing-3) var(--spacing-6) var(--spacing-3) var(--spacing-16);
+}
+
+:host(.line-items-panel--card) {
+  padding: var(--spacing-2) 0;
+  border-radius: var(--border-radius-md);
+}
+
+.line-items-panel__table {
+  width: 100%;
+  border-collapse: collapse;
+
+  th {
+    padding: var(--spacing-1) var(--spacing-3);
+    color: var(--color-text-muted);
+    text-align: left;
+    @include caption-strong;
+  }
+
+  td {
+    padding: var(--spacing-2) var(--spacing-3);
+    border-bottom: var(--border-width-default) solid var(--color-border);
+    color: var(--color-text);
+    @include body-sm;
+  }
+}
+
+.line-items-panel__sku {
+  width: 120px;
+}
+
+.line-items-panel__qty {
+  width: 80px;
+}
+
+.line-items-panel__amount {
+  width: 120px;
+}
+
+.line-items-panel__table .line-items-panel__number {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.line-items-panel__table .line-items-panel__sku-value {
+  @include body-sm-strong;
+}
+
+.line-items-panel__table .line-items-panel__subtotal,
+.line-items-panel__card-line .line-items-panel__subtotal {
+  @include numeric-md;
+}
+
+.line-items-panel__list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.line-items-panel__card-line {
+  display: flex;
+  gap: var(--spacing-3);
+  align-items: flex-start;
+  padding: var(--spacing-2) var(--spacing-3);
+  border-bottom: var(--border-width-default) solid var(--color-border);
+}
+
+.line-items-panel__card-text {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.line-items-panel__card-product {
+  overflow: hidden;
+  color: var(--color-text);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  @include body-sm-strong;
+}
+
+.line-items-panel__card-meta {
+  color: var(--color-text-muted);
+  @include caption-regular;
+}
+
+.line-items-panel__status {
+  display: flex;
+  gap: var(--spacing-1);
+  align-items: center;
+  margin: 0;
+  padding: var(--spacing-2) var(--spacing-3);
+  color: var(--color-text-muted);
+  @include caption-regular;
+}
+
+.line-items-panel__status--error {
+  color: var(--color-danger);
+}
+
+.line-items-panel__footer {
+  display: flex;
+  gap: var(--spacing-3);
+  align-items: center;
+  padding: var(--spacing-2) var(--spacing-3);
+}
+
+// Button/Ghost: no resting fill.
+.line-items-panel__load-more {
+  display: inline-flex;
+  gap: var(--spacing-2);
+  align-items: center;
+  min-height: var(--size-control-sm);
+  padding: 0 var(--spacing-3);
+  border: 0;
+  border-radius: var(--border-radius-md);
+  background: var(--color-transparent);
+  color: var(--color-text);
+  cursor: pointer;
+  @include body-sm-strong;
+
+  &:hover {
+    background: var(--color-surface-hover);
+  }
+
+  &:focus-visible {
+    @include focus-ring;
+  }
+}
+
+:host(.line-items-panel--card) .line-items-panel__load-more {
+  min-height: var(--size-control-lg);
+  padding: 0 var(--spacing-5);
+  @include body-md-strong;
+}
+
+.line-items-panel__count {
+  color: var(--color-text-muted);
+  white-space: nowrap;
+  @include caption-regular;
+}

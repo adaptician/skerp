@@ -1,0 +1,182 @@
+@use 'typography' as *;
+@use 'mixins' as *;
+
+// Layer 3 — form field tokens and base styles, mirroring Field/Text, Field/Number, Field/Select,
+// Field/Textarea and Field/ReadOnly. Markup:
+//   <div class="field">
+//     <label class="field__label">Name <span class="field__required">*</span></label>
+//     <div class="field__control">[leading icon] <input class="field__input" /> [indicator]</div>
+//     <p class="field__helper">…</p> or <p class="field__error"><a-icon name="error" />…</p>
+//   </div>
+// State modifiers go on .field__control: --error, --disabled, --readonly, --focused (for controls
+// whose input is a child, the :focus-within rule covers keyboard focus).
+
+:root {
+  --field__background: var(--color-surface-raised);
+  --field__background--disabled: var(--color-surface-disabled);
+  --field__background--readonly: var(--color-surface-sunken);
+  --field__border: var(--color-border-strong);
+  --field__border--disabled: var(--color-border-disabled);
+  --field__border--readonly: var(--color-border);
+  --field__border--error: var(--color-border-error);
+  --field__text: var(--color-text);
+  --field__text--disabled: var(--color-text-disabled);
+  --field__placeholder: var(--color-text-placeholder);
+  --field__label: var(--color-text);
+  --field__helper: var(--color-text-muted);
+  --field__error: var(--color-danger);
+  --field__height: var(--size-control-lg);
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-2);
+  min-width: 0;
+}
+
+.field__label {
+  display: flex;
+  gap: var(--spacing-1);
+  align-items: center;
+  color: var(--field__label);
+  @include body-sm-strong;
+}
+
+.field__label--disabled {
+  color: var(--field__text--disabled);
+}
+
+.field__required {
+  color: var(--color-danger);
+}
+
+.field__label--disabled .field__required {
+  color: inherit;
+}
+
+.field__control {
+  display: flex;
+  gap: var(--spacing-2);
+  align-items: center;
+  min-height: var(--field__height);
+  padding: 0 var(--spacing-3);
+  border: var(--border-width-default) solid var(--field__border);
+  border-radius: var(--border-radius-md);
+  background: var(--field__background);
+  color: var(--field__text);
+  @include body-sm;
+
+  &:focus-within {
+    @include focus-ring;
+  }
+}
+
+.field__control--error {
+  border-color: var(--field__border--error);
+}
+
+.field__control--disabled {
+  border-color: var(--field__border--disabled);
+  background: var(--field__background--disabled);
+  color: var(--field__text--disabled);
+}
+
+.field__control--readonly {
+  border-style: dashed;
+  border-color: var(--field__border--readonly);
+  background: var(--field__background--readonly);
+}
+
+.field__control--multiline {
+  align-items: stretch;
+  min-height: 96px;
+  padding: var(--spacing-3);
+}
+
+.field__input {
+  flex: 1 1 auto;
+  width: 100%;
+  min-width: 0;
+  padding: 0;
+  border: 0;
+  outline: none;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+
+  &::placeholder {
+    color: var(--field__placeholder);
+    opacity: 1;
+  }
+
+  &:disabled {
+    color: var(--field__text--disabled);
+    cursor: not-allowed;
+  }
+}
+
+.field__input--numeric {
+  text-align: right;
+  @include numeric-sm;
+}
+
+textarea.field__input {
+  min-height: 70px;
+  resize: vertical;
+}
+
+select.field__input {
+  appearance: none;
+  cursor: pointer;
+}
+
+.field__prefix {
+  flex-shrink: 0;
+  color: var(--color-text-muted);
+}
+
+.field__icon {
+  flex-shrink: 0;
+  color: var(--color-icon);
+}
+
+.field__helper {
+  margin: 0;
+  color: var(--field__helper);
+  @include caption-regular;
+}
+
+.field__helper--disabled {
+  color: var(--field__text--disabled);
+}
+
+.field__error {
+  display: flex;
+  gap: var(--spacing-1);
+  align-items: center;
+  margin: 0;
+  color: var(--field__error);
+  @include caption-regular;
+}
+
+.field__counter {
+  margin: 0;
+  margin-left: auto;
+  color: var(--field__helper);
+  @include caption-regular;
+}
+
+/* 
+  In some browsers inputs with type search display an 'x' icon to clear the input. 
+  This is handled explicitly, so hide the shadow DOM element.  
+*/
+/* Target WebKit browsers (Chrome, Safari, Edge, Opera) */
+input[type="search"]::-webkit-search-decoration,
+input[type="search"]::-webkit-search-cancel-button,
+input[type="search"]::-webkit-search-results-button,
+input[type="search"]::-webkit-search-results-decoration {
+  -webkit-appearance: none;
+  appearance: none;
+  display: none;
+}
