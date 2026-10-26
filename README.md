@@ -12,7 +12,9 @@ It is a client–server app for local demonstration:
 
 ## Video Walkthrough
 
-[Loom Video](https://www.loom.com/share/99a176d72b54478ea1ad7d62c87d8d87)
+[Introductory Loom Video](https://www.loom.com/share/99a176d72b54478ea1ad7d62c87d8d87)
+
+[More detailed walk-through](https://drive.google.com/file/d/1rWnovp1RU-uAkR0BqaFl7XGPh-na7d8C/view?usp=sharing)
 
 ## Prerequisites
 
